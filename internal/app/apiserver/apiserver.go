@@ -10,10 +10,10 @@ import (
 )
 
 type APIServer struct {
-	config *Config
-	logger *logrus.Logger
-	router *mux.Router
-	store *store.Store
+	config  *Config
+	logger  *logrus.Logger
+	router  *mux.Router
+	store   *store.Store
 }
 
 func New(config *Config) *APIServer {
