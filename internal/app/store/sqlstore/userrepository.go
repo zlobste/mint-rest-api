@@ -1,4 +1,4 @@
-package store
+package sqlstore
 
 import (
 	"github.com/zlobste/mint-rest-api/internal/app/model"

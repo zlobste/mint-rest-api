@@ -1,71 +1,29 @@
 package apiserver
 
 import (
-	"github.com/sirupsen/logrus"
-	
-	"github.com/zlobste/mint-rest-api/internal/app/store"
-	
-	"io"
+	"database/sql"
 	"net/http"
-
-	"github.com/gorilla/mux"
+	
+	"github.com/zlobste/mint-rest-api/internal/app/store/sqlstore"
 )
 
-type APIServer struct {
-	config  *Config
-	logger  *logrus.Logger
-	router  *mux.Router
-	store   *store.Store
-}
-
-func New(config *Config) *APIServer {
-	return &APIServer{
-		config: config,
-		logger: logrus.New(),
-		router: mux.NewRouter(),
-	}
-}
-
-func (s *APIServer) Start() error {
-
-	if err := s.ConfigureLogger(); err != nil {
-		return err
-	}
-
-	if err := s.ConfigureStore(); err != nil {
-		return err
-	}
-
-
-	s.logger.Info("Starting api server...")
-	s.ConfigureRouter()
-	return http.ListenAndServe(s.config.BindAddres, s.router)
-}
-
-func (s *APIServer) ConfigureLogger() error {
-	level, err := logrus.ParseLevel(s.config.LogLevel)
+func Start(config Config) error {
+	db, err := newDB(config.DatabaseURL)
 	if err != nil {
 		return err
 	}
-	s.logger.SetLevel(level)
-	return nil
+	store := sqlstore.New(db)
+	server := newServer(store)
+	return http.ListenAndServe(config.BindAddres, server.router)
 }
 
-func (s *APIServer) ConfigureStore() error {
-	st := store.New(s.config.Store)
-	if err := st.Open(); err != nil {
-		return err
+func newDB(databaseURL string) (*sql.DB, error) {
+	db, err := sql.Open("postgres", databaseURL);
+	if err != nil {
+		return nil, err
 	}
-	s.store = st
-	return nil
-}
-
-func (s *APIServer) ConfigureRouter() {
-	s.router.HandleFunc("/", s.HandleHello())
-}
-
-func (s *APIServer) HandleHello() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		io.WriteString(w, "Hello")
+	if err := db.Ping(); err != nil {
+		return nil, err
 	}
+	return db, err
 }
