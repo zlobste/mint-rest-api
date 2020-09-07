@@ -8,19 +8,20 @@ type UserRepository struct {
 	store *Store
 }
 
-func ( r *UserRepository) Create(model *model.User) (*model.User, error) {
+func ( r *UserRepository) Create(model *model.User) error {
 	if err := model.Validate(); err != nil {
-		return  model, err
+		return err
 	}
 	
 	if err := model.EncryptPassword(); err != nil {
-		return  model, err
+		return err
 	}
 	
-	if err := r.store.db.QueryRow("INSERT INTO users (email, password) VALUES ($1,$2) RETURNING id", model.Email, model.Password).Scan(&model.Id); err != nil {
-		return nil, err
-	}
-	return model, nil
+	return r.store.db.QueryRow(
+		"INSERT INTO users (email, password) VALUES ($1,$2) RETURNING id",
+		model.Email,
+		model.Password,
+	).Scan(&model.Id)
 }
 
 func ( r *UserRepository) FindByEmail(email string) (*model.User, error) {
