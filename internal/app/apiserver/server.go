@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	
 	"github.com/gorilla/mux"
@@ -34,6 +35,7 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (s *server) ConfigureRouter() {
 	s.router.HandleFunc("/users", s.handleUsersCreate()).Methods("POST")
+	s.router.HandleFunc("/sessions", s.handleSessionCreate()).Methods("POST")
 }
 
 func (s *server) handleUsersCreate() http.HandlerFunc {
@@ -45,6 +47,7 @@ func (s *server) handleUsersCreate() http.HandlerFunc {
 		req := &request{}
 		if err:= json.NewDecoder(r.Body).Decode(req); err != nil {
 			s.error(w, r, http.StatusBadRequest, err)
+			return
 		}
 		u := &model.User{
 			Email: req.Email,
@@ -52,9 +55,36 @@ func (s *server) handleUsersCreate() http.HandlerFunc {
 		}
 		if err := s.store.User().Create(u); err != nil {
 			s.error(w, r, http.StatusUnprocessableEntity, err)
+			return
 		}
 		u.Snitize()
 		s.respond(w, r, http.StatusCreated, u)
+	}
+}
+
+func (s *server) handleSessionCreate() http.HandlerFunc {
+	type request struct {
+		Email string    `json:"email"`
+		Password string `json:"password"`
+	}
+	return func(w http.ResponseWriter, r *http.Request) {
+		req := &request{}
+		if err:= json.NewDecoder(r.Body).Decode(req); err != nil {
+			s.error(w, r, http.StatusBadRequest, err)
+			return
+		}
+		user, err := s.store.User().FindByEmail(req.Email)
+		if err != nil {
+			s.error(w, r, http.StatusUnauthorized, err)
+			return
+		}
+		
+		if !user.ComparePassword(req.Password) {
+			s.error(w, r, http.StatusUnauthorized, errors.New("Incorrect email or password"))
+			return
+		}
+		
+		s.respond(w, r, http.StatusOK, nil)
 	}
 }
 

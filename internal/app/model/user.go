@@ -38,3 +38,7 @@ func (u *User) Validate() error {
 func (u *User) Snitize() {
 	u.Password = ""
 }
+
+func (u *User) ComparePassword(password string) bool {
+	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)) != nil
+}
