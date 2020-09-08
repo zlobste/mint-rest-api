@@ -7,7 +7,7 @@ import (
 	"github.com/zlobste/mint-rest-api/internal/app/store/sqlstore"
 )
 
-func Start(config Config) error {
+func Start(config *Config) error {
 	db, err := newDB(config.DatabaseURL)
 	if err != nil {
 		return err

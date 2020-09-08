@@ -10,9 +10,9 @@ import (
 )
 
 type User struct {
-	Id          int64
-	Email       string
-	Password    string
+	Id          int64   `json:"id"`
+	Email       string  `json:"email"`
+	Password    string  `json:"password,omitempty"`
 }
 
 func (u *User) EncryptPassword() error {
@@ -33,4 +33,8 @@ func (u *User) Validate() error {
 		validation.Field(&u.Email, validation.Required, is.Email),
 		validation.Field(&u.Password, validation.Required, validation.Length(6, 100)),
 	)
+}
+
+func (u *User) Snitize() {
+	u.Password = ""
 }
