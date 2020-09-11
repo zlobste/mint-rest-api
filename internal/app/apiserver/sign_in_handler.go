@@ -6,12 +6,21 @@ import (
 	"net/http"
 )
 
+var (
+	errIncorrectEmailOrPassword = errors.New("incorrect email or password")
+	errNotAuthenticated         = errors.New("not authenticated")
+)
+
 // Login handler for access
 func (s *server) SignIn() http.HandlerFunc {
 
 	type request struct {
 		Email string    `json:"email"`
 		Password string `json:"password"`
+	}
+	
+	type JWT struct {
+		Token string `json:"token"`
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -21,13 +30,8 @@ func (s *server) SignIn() http.HandlerFunc {
 			return
 		}
 		user, err := s.store.User().FindByEmail(req.Email)
-		if err != nil {
-			s.error(w, r, http.StatusUnauthorized, err)
-			return
-		}
-
-		if !user.ComparePassword(req.Password) {
-			s.error(w, r, http.StatusUnauthorized, errors.New("Incorrect email or password"))
+		if err != nil || !user.ComparePassword(req.Password) {
+			s.error(w, r, http.StatusUnauthorized, errIncorrectEmailOrPassword)
 			return
 		}
 
@@ -37,7 +41,7 @@ func (s *server) SignIn() http.HandlerFunc {
 			return
 		}
 
-		s.respond(w, r, http.StatusOK, token)
+		s.respond(w, r, http.StatusOK, &JWT{Token:token})
 	}
 }
 
