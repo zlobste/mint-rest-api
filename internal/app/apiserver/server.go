@@ -35,8 +35,9 @@ func (s *server) ConfigureRouter() {
 	s.router.Use(s.ContentTypeMiddleware)
 	s.router.HandleFunc("/register", s.SignUp()).Methods("POST")
 	s.router.HandleFunc("/login", s.SignIn()).Methods("POST")
-	/*subrouter := s.router.PathPrefix("/api").Subrouter()
-	s.router.Use(s.AuthJwtVerify)*/
+	subrouter := s.router.PathPrefix("/api").Subrouter()
+	subrouter.Use(s.TokenAuthMiddleware)
+	subrouter.HandleFunc("/user", s.GetUser()).Methods("GET")
 }
 
 func (s *server) error(w http.ResponseWriter, r *http.Request, code int, err error){

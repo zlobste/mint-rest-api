@@ -31,3 +31,11 @@ func ( r *UserRepository) FindByEmail(email string) (*model.User, error) {
 	}
 	return model, nil
 }
+
+func ( r *UserRepository) FindById(id int64) (*model.User, error) {
+	model := &model.User{}
+	if err := r.store.db.QueryRow("SELECT id, email, password FROM users WHERE id=$1", id).Scan(&model.Id, &model.Email, &model.Password); err != nil {
+		return nil, err
+	}
+	return model, nil
+}
