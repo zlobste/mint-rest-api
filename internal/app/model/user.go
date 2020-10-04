@@ -6,11 +6,12 @@ import (
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"golang.org/x/crypto/bcrypt"
 	
-	validation  "github.com/go-ozzo/ozzo-validation/v4"
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
 type User struct {
 	Id          int64   `json:"id"`
+	Name        string  `json:"name"`
 	Email       string  `json:"email"`
 	Password    string  `json:"password,omitempty"`
 }
@@ -30,6 +31,7 @@ func (u *User) EncryptPassword() error {
 func (u *User) Validate() error {
 	return validation.ValidateStruct(
 		u,
+		validation.Field(&u.Name, validation.Required, validation.Length(6, 100)),
 		validation.Field(&u.Email, validation.Required, is.Email),
 		validation.Field(&u.Password, validation.Required, validation.Length(6, 100)),
 	)
