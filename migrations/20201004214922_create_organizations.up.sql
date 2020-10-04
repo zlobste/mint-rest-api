@@ -3,4 +3,4 @@ CREATE TABLE organizations (
     name VARCHAR NOT NULL,
     email VARCHAR NOT NULL UNIQUE,
     password VARCHAR NOT NULL
-)
+);
