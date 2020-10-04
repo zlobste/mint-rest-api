@@ -27,7 +27,8 @@ func ( r *UserRepository) Create(model *model.User) error {
 
 func ( r *UserRepository) FindByEmail(email string) (*model.User, error) {
 	model := &model.User{}
-	if err := r.store.db.QueryRow("SELECT id, name, email, password FROM users WHERE email=$1", email).Scan(&model.Id, &model.Name, &model.Email, &model.Password); err != nil {
+	if err := r.store.db.QueryRow("SELECT id, name, email, password FROM users WHERE email=$1", email).
+		Scan(&model.Id, &model.Name, &model.Email, &model.Password); err != nil {
 		return nil, err
 	}
 	return model, nil
@@ -35,7 +36,8 @@ func ( r *UserRepository) FindByEmail(email string) (*model.User, error) {
 
 func ( r *UserRepository) FindById(id int64) (*model.User, error) {
 	model := &model.User{}
-	if err := r.store.db.QueryRow("SELECT id, name, email, password FROM users WHERE id=$1", id).Scan(&model.Id, &model.Name, &model.Email, &model.Password); err != nil {
+	if err := r.store.db.QueryRow("SELECT id, name, email, password FROM users WHERE id=$1", id).
+		Scan(&model.Id, &model.Name, &model.Email, &model.Password); err != nil {
 		return nil, err
 	}
 	return model, nil

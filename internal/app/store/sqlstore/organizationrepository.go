@@ -27,7 +27,8 @@ func ( o *OrganizationRepository) Create(model *model.Organization) error {
 
 func ( o *OrganizationRepository) FindByEmail(email string) (*model.Organization, error) {
 	model := &model.Organization{}
-	if err := o.store.db.QueryRow("SELECT id, name, email, password FROM organizations WHERE email=$1", email).Scan(&model.Id, &model.Name, &model.Email, &model.Password); err != nil {
+	if err := o.store.db.QueryRow("SELECT id, name, email, password FROM organizations WHERE email=$1", email).
+		Scan(&model.Id, &model.Name, &model.Email, &model.Password); err != nil {
 		return nil, err
 	}
 	return model, nil
@@ -35,7 +36,8 @@ func ( o *OrganizationRepository) FindByEmail(email string) (*model.Organization
 
 func ( o *OrganizationRepository) FindById(id int64) (*model.Organization, error) {
 	model := &model.Organization{}
-	if err := o.store.db.QueryRow("SELECT id, name, email, password FROM organizations WHERE id=$1", id).Scan(&model.Id, &model.Name, &model.Email, &model.Password); err != nil {
+	if err := o.store.db.QueryRow("SELECT id, name, email, password FROM organizations WHERE id=$1", id).
+		Scan(&model.Id, &model.Name, &model.Email, &model.Password); err != nil {
 		return nil, err
 	}
 	return model, nil

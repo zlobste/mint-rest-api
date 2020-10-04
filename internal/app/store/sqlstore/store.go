@@ -3,7 +3,7 @@ package sqlstore
 import (
 	"database/sql"
 	
-	_ "github.com/lib/pq"
+	"github.com/zlobste/mint-rest-api/internal/app/store"
 )
 
 type Store struct {
@@ -17,12 +17,12 @@ func New(db *sql.DB) *Store {
 	}
 }
 
-func (s *Store) User() *UserRepository {
+func (s *Store) User() store.UserRepository {
 	if s.userRepository != nil {
 		return s.userRepository
 	}
 	s.userRepository = &UserRepository{
 		store: s,
 	}
-	return  s.userRepository
+	return s.userRepository
 }
