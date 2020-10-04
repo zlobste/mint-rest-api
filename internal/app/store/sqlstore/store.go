@@ -27,3 +27,13 @@ func (s *Store) User() store.UserRepository {
 	}
 	return s.userRepository
 }
+
+func (s *Store) Organization() store.OrganizationRepository {
+	if s.organizationRepository != nil {
+		return s.organizationRepository
+	}
+	s.organizationRepository = &OrganizationRepository{
+		store: s,
+	}
+	return s.organizationRepository
+}
