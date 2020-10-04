@@ -7,8 +7,9 @@ import (
 )
 
 type Store struct {
-	db              *sql.DB
-	userRepository  *UserRepository
+	db                      *sql.DB
+	userRepository          *UserRepository
+	organizationRepository  *OrganizationRepository
 }
 
 func New(db *sql.DB) *Store {
