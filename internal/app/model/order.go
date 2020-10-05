@@ -19,5 +19,7 @@ func (o *Order) Validate() error {
 		o,
 		validation.Field(&o.Cost, validation.Required),
 		validation.Field(&o.DateTime, validation.Required),
+		validation.Field(&o.DishId, validation.Required),
+		validation.Field(&o.UserId, validation.Required),
 	)
 }
