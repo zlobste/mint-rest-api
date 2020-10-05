@@ -11,6 +11,7 @@ type Store struct {
 	userRepository          *UserRepository
 	organizationRepository  *OrganizationRepository
 	menuRepository          *MenuRepository
+	orderRepository         *OrderRepository
 }
 
 func New(db *sql.DB) *Store {
@@ -47,4 +48,14 @@ func (s *Store) Menu() store.MenuRepository {
 		store: s,
 	}
 	return s.menuRepository
+}
+
+func (s *Store) Order() store.OrderRepository {
+	if s.orderRepository != nil {
+		return s.orderRepository
+	}
+	s.orderRepository = &OrderRepository{
+		store: s,
+	}
+	return s.orderRepository
 }

@@ -20,3 +20,8 @@ type MenuRepository interface {
 	Create(model *model.Menu) error
 	FindById(id int64) (*model.Menu, error)
 }
+
+type OrderRepository interface {
+	Create(model *model.Order) error
+	FindById(id int64) (*model.Order, error)
+}
