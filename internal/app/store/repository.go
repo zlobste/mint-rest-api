@@ -30,3 +30,8 @@ type DishRepository interface {
 	Create(model *model.Dish) error
 	FindById(id int64) (*model.Dish, error)
 }
+
+type PaymentDetailsRepository interface {
+	Create(model *model.PaymentDetails) error
+	FindById(id int64) (*model.PaymentDetails, error)
+}

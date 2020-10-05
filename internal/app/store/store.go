@@ -6,4 +6,5 @@ type Store interface {
 	Menu() MenuRepository
 	Order() OrderRepository
 	Dish() DishRepository
+	PaymentDetails() PaymentDetailsRepository
 }
