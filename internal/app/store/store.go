@@ -5,4 +5,5 @@ type Store interface {
 	Organization() OrganizationRepository
 	Menu() MenuRepository
 	Order() OrderRepository
+	Dish() DishRepository
 }
