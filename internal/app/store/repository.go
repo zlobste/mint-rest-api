@@ -19,6 +19,7 @@ type OrganizationRepository interface {
 type MenuRepository interface {
 	Create(model *model.Menu) error
 	FindById(id int64) (*model.Menu, error)
+	DeleteById(id int64) error
 }
 
 type OrderRepository interface {
