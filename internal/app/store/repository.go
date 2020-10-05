@@ -5,13 +5,18 @@ import (
 )
 
 type UserRepository interface {
-	Create(user *model.User) error
+	Create(model *model.User) error
 	FindByEmail(email string) (*model.User, error)
 	FindById(id int64) (*model.User, error)
 }
 
 type OrganizationRepository interface {
-	Create(user *model.Organization) error
+	Create(model *model.Organization) error
 	FindByEmail(email string) (*model.Organization, error)
 	FindById(id int64) (*model.Organization, error)
+}
+
+type MenuRepository interface {
+	Create(model *model.Menu) error
+	FindById(id int64) (*model.Menu, error)
 }
