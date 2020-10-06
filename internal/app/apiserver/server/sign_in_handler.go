@@ -1,9 +1,11 @@
-package apiserver
+package server
 
 import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	
+	"github.com/zlobste/mint-rest-api/internal/app/apiserver/helpers"
 )
 
 var (
@@ -26,22 +28,22 @@ func (s *server) SignIn() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := &request{}
 		if err:= json.NewDecoder(r.Body).Decode(req); err != nil {
-			s.error(w, r, http.StatusBadRequest, err)
+			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
 		user, err := s.store.User().FindByEmail(req.Email)
 		if err != nil || !user.ComparePassword(req.Password) {
-			s.error(w, r, http.StatusUnauthorized, errIncorrectEmailOrPassword)
+			helpers.Error(w, r, http.StatusUnauthorized, errIncorrectEmailOrPassword)
 			return
 		}
 
-		token, err := CreateJWT(user.Id)
+		token, err := helpers.CreateJWT(user.Id)
 		if err != nil {
-			s.error(w, r, http.StatusBadRequest, err)
+			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-
-		s.respond(w, r, http.StatusOK, &JWT{Token:token})
+		
+		helpers.Respond(w, r, http.StatusOK, &JWT{Token:token})
 	}
 }
 

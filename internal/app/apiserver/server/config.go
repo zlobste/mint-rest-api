@@ -1,4 +1,4 @@
-package apiserver
+package server
 
 type Config struct {
 	BindAddres  string `toml:"bind_addres"`

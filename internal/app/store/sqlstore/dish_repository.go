@@ -1,14 +1,14 @@
 package sqlstore
 
 import (
-	"github.com/zlobste/mint-rest-api/internal/app/model"
+	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
 
 type DishRepository struct {
 	store *Store
 }
 
-func (d *DishRepository) Create(model *model.Dish) error {
+func (d *DishRepository) Create(model *models.Dish) error {
 	if err := model.Validate(); err != nil {
 		return err
 	}
@@ -22,8 +22,8 @@ func (d *DishRepository) Create(model *model.Dish) error {
 	).Scan(&model.Id)
 }
 
-func (d *DishRepository) FindById(id int64) (*model.Dish, error) {
-	model := &model.Dish{}
+func (d *DishRepository) FindById(id int64) (*models.Dish, error) {
+	model := &models.Dish{}
 	if err := d.store.db.QueryRow("SELECT id, title, description, organization_id FROM dishes WHERE id=$1", id).
 		Scan(&model.Id, &model.Name, &model.Description, &model.Cost, &model.MenuId); err != nil {
 		return nil, err

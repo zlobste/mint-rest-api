@@ -1,14 +1,14 @@
 package sqlstore
 
 import (
-	"github.com/zlobste/mint-rest-api/internal/app/model"
+	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
 
 type PaymentDetailsRepository struct {
 	store *Store
 }
 
-func (p *PaymentDetailsRepository) Create(model *model.PaymentDetails) error {
+func (p *PaymentDetailsRepository) Create(model *models.PaymentDetails) error {
 	if err := model.Validate(); err != nil {
 		return err
 	}
@@ -21,8 +21,8 @@ func (p *PaymentDetailsRepository) Create(model *model.PaymentDetails) error {
 	).Scan(&model.Id)
 }
 
-func (p *PaymentDetailsRepository) FindById(id int64) (*model.PaymentDetails, error) {
-	model := &model.PaymentDetails{}
+func (p *PaymentDetailsRepository) FindById(id int64) (*models.PaymentDetails, error) {
+	model := &models.PaymentDetails{}
 	if err := p.store.db.QueryRow("SELECT id, bank, account, organization_id FROM payment_details WHERE id=$1", id).
 		Scan(&model.Id, &model.Bank, &model.Account, &model.OrganizationId); err != nil {
 		return nil, err

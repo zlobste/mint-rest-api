@@ -1,14 +1,14 @@
 package sqlstore
 
 import (
-	"github.com/zlobste/mint-rest-api/internal/app/model"
+	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
 
 type UserRepository struct {
 	store *Store
 }
 
-func ( r *UserRepository) Create(model *model.User) error {
+func ( r *UserRepository) Create(model *models.User) error {
 	if err := model.Validate(); err != nil {
 		return err
 	}
@@ -25,8 +25,8 @@ func ( r *UserRepository) Create(model *model.User) error {
 	).Scan(&model.Id)
 }
 
-func ( r *UserRepository) FindByEmail(email string) (*model.User, error) {
-	model := &model.User{}
+func ( r *UserRepository) FindByEmail(email string) (*models.User, error) {
+	model := &models.User{}
 	if err := r.store.db.QueryRow("SELECT id, name, email, password FROM users WHERE email=$1", email).
 		Scan(&model.Id, &model.Name, &model.Email, &model.Password); err != nil {
 		return nil, err
@@ -34,8 +34,8 @@ func ( r *UserRepository) FindByEmail(email string) (*model.User, error) {
 	return model, nil
 }
 
-func ( r *UserRepository) FindById(id int64) (*model.User, error) {
-	model := &model.User{}
+func ( r *UserRepository) FindById(id int64) (*models.User, error) {
+	model := &models.User{}
 	if err := r.store.db.QueryRow("SELECT id, name, email, password FROM users WHERE id=$1", id).
 		Scan(&model.Id, &model.Name, &model.Email, &model.Password); err != nil {
 		return nil, err

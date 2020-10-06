@@ -1,41 +1,41 @@
 package store
 
 import (
-	"github.com/zlobste/mint-rest-api/internal/app/model"
+	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
 
 type UserRepository interface {
-	Create(model *model.User) error
-	FindByEmail(email string) (*model.User, error)
-	FindById(id int64) (*model.User, error)
+	Create(model *models.User) error
+	FindByEmail(email string) (*models.User, error)
+	FindById(id int64) (*models.User, error)
 }
 
 type OrganizationRepository interface {
-	Create(model *model.Organization) error
-	FindByEmail(email string) (*model.Organization, error)
-	FindById(id int64) (*model.Organization, error)
+	Create(model *models.Organization) error
+	FindByEmail(email string) (*models.Organization, error)
+	FindById(id int64) (*models.Organization, error)
 }
 
 type MenuRepository interface {
-	Create(model *model.Menu) error
-	FindById(id int64) (*model.Menu, error)
+	Create(model *models.Menu) error
+	FindById(id int64) (*models.Menu, error)
 	DeleteById(id int64) error
 }
 
 type OrderRepository interface {
-	Create(model *model.Order) error
-	FindById(id int64) (*model.Order, error)
+	Create(model *models.Order) error
+	FindById(id int64) (*models.Order, error)
 	Cancel(id int64) error
 }
 
 type DishRepository interface {
-	Create(model *model.Dish) error
-	FindById(id int64) (*model.Dish, error)
+	Create(model *models.Dish) error
+	FindById(id int64) (*models.Dish, error)
 	DeleteById(id int64) error
 }
 
 type PaymentDetailsRepository interface {
-	Create(model *model.PaymentDetails) error
-	FindById(id int64) (*model.PaymentDetails, error)
+	Create(model *models.PaymentDetails) error
+	FindById(id int64) (*models.PaymentDetails, error)
 	DeleteById(id int64) error
 }

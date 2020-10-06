@@ -1,13 +1,14 @@
-package apiserver
+package helpers
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"fmt"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+	
+	"github.com/dgrijalva/jwt-go"
 )
 
 type AccessDetails struct {

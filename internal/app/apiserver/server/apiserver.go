@@ -1,9 +1,9 @@
-package apiserver
+package server
 
 import (
 	"database/sql"
 	"net/http"
-	
+
 	"github.com/zlobste/mint-rest-api/internal/app/store/sqlstore"
 )
 

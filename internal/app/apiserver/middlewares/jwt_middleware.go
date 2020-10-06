@@ -1,13 +1,15 @@
-package apiserver
+package middlewares
 
 import (
 	"net/http"
+	
+	"github.com/zlobste/mint-rest-api/internal/app/apiserver/helpers"
 )
 
 // TokenAuthMiddleware verify token
-func (s *server) TokenAuthMiddleware(next http.Handler) http.Handler {
+func TokenAuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		err := TokenValid(r)
+		err := helpers.TokenValid(r)
 		if err != nil {
 			s.error(w, r, http.StatusUnauthorized, err)
 			return
