@@ -1,6 +1,8 @@
 package sqlstore
 
 import (
+	"errors"
+	
 	"github.com/zlobste/mint-rest-api/internal/app/model"
 )
 
@@ -22,11 +24,27 @@ func (o *OrderRepository) Create(model *model.Order) error {
 	).Scan(&model.Id)
 }
 
-func ( o *OrderRepository) FindById(id int64) (*model.Order, error) {
+func (o *OrderRepository) FindById(id int64) (*model.Order, error) {
 	model := &model.Order{}
-	if err := o.store.db.QueryRow("SELECT id, cost, datetime, dish_id, user_id FROM orders WHERE id=$1", id).
-		Scan(&model.Id, &model.Cost, &model.DateTime, &model.DishId, &model.UserId); err != nil {
+	if err := o.store.db.QueryRow("SELECT id, cost, datetime, canceled, in_progress, dish_id, user_id FROM orders WHERE id=$1", id).
+		Scan(&model.Id, &model.Cost, &model.DateTime, &model.Canceled, &model.InProgress, &model.DishId, &model.UserId); err != nil {
 		return nil, err
 	}
 	return model, nil
+}
+
+
+func (o *OrderRepository) Cancel(id int64) error {
+	model := &model.Order{}
+	if err := o.store.db.QueryRow("SELECT id, in_progress FROM orders WHERE id=$1", id).
+		Scan(&model.Id, &model.InProgress); err != nil {
+		return err
+	}
+	
+	if model.InProgress {
+		return errors.New("Order has already in progress!")
+	}
+	
+	_, err := o.store.db.Exec("UPDATE orders SET canceled = $1 where id = $2", true, id)
+	return err
 }

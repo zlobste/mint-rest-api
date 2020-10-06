@@ -30,6 +30,7 @@ type OrderRepository interface {
 type DishRepository interface {
 	Create(model *model.Dish) error
 	FindById(id int64) (*model.Dish, error)
+	Cancel(id int64) error
 }
 
 type PaymentDetailsRepository interface {
