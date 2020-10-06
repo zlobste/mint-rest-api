@@ -21,7 +21,7 @@ func (m *MenuRepository) Create(model *model.Menu) error {
 	).Scan(&model.Id)
 }
 
-func ( m *MenuRepository) FindById(id int64) (*model.Menu, error) {
+func (m *MenuRepository) FindById(id int64) (*model.Menu, error) {
 	model := &model.Menu{}
 	if err := m.store.db.QueryRow("SELECT id, title, description, organization_id FROM menu WHERE i = $1", id).
 		Scan(&model.Id, &model.Title, &model.Description, &model.OrganizationId); err != nil {
@@ -30,7 +30,7 @@ func ( m *MenuRepository) FindById(id int64) (*model.Menu, error) {
 	return model, nil
 }
 
-func ( m *MenuRepository)  DeleteById(id int64) error {
+func (m *MenuRepository)  DeleteById(id int64) error {
 	_, err := m.store.db.Exec("DELETE FROM menu where id = $1", id)
 	return err
 }
