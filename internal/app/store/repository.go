@@ -25,12 +25,12 @@ type MenuRepository interface {
 type OrderRepository interface {
 	Create(model *model.Order) error
 	FindById(id int64) (*model.Order, error)
+	Cancel(id int64) error
 }
 
 type DishRepository interface {
 	Create(model *model.Dish) error
 	FindById(id int64) (*model.Dish, error)
-	Cancel(id int64) error
 }
 
 type PaymentDetailsRepository interface {
