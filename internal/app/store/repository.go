@@ -35,4 +35,5 @@ type DishRepository interface {
 type PaymentDetailsRepository interface {
 	Create(model *model.PaymentDetails) error
 	FindById(id int64) (*model.PaymentDetails, error)
+	DeleteById(id int64) error
 }
