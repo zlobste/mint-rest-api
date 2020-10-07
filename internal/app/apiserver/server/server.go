@@ -47,4 +47,8 @@ func (s *server) ConfigureRouter() {
 		orderRouter.HandleFunc("/create", s.CreateOrder()).Methods("POST")
 		orderRouter.HandleFunc("/cancel", s.CancelOrder()).Methods("UPDATE")
 		orderRouter.HandleFunc("/info", s.GetOrder()).Methods("GET")
-}
+	dishRouter := apiRouter.PathPrefix("/dish").Subrouter()
+		dishRouter.HandleFunc("/create", s.CreateDish()).Methods("POST")
+		dishRouter.HandleFunc("/delete", s.DeleteDish()).Methods("DELETE")
+		dishRouter.HandleFunc("/info", s.GetDish()).Methods("GET")
+	}

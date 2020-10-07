@@ -8,11 +8,12 @@ import (
 	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
 
-func (s *server) CreateMenu() http.HandlerFunc {
+func (s *server) CreateDish() http.HandlerFunc {
 	type request struct {
-		Title           string  `json:"title"`
+		Name            string  `json:"name"`
 		Description     string  `json:"description"`
-		OrganizationId  string  `json:"organization_id"`
+		Cost            float64 `json:"cost"`
+		MenuId          string  `json:"menu_id"`
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -21,21 +22,23 @@ func (s *server) CreateMenu() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		m := &models.Menu{
-			Title: req.Title,
+		d := &models.Dish{
+			Name: req.Name,
 			Description: req.Description,
-			OrganizationId: req.OrganizationId,
+			Cost: req.Cost,
+			MenuId: req.MenuId,
 		}
-		if err := s.store.Menu().Create(m); err != nil {
+		if err := s.store.Dish().Create(d); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
 
-		helpers.Respond(w, r, http.StatusCreated, m)
+		helpers.Respond(w, r, http.StatusCreated, d)
 	}
 }
 
-func (s *server) DeleteMenu() http.HandlerFunc {
+func (s *server) DeleteDish() http.HandlerFunc {
+
 	type request struct {
 		id int64 `json:"id"`
 	}
@@ -45,7 +48,7 @@ func (s *server) DeleteMenu() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		err := s.store.Menu().DeleteById(req.id)
+		err := s.store.Dish().DeleteById(req.id)
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
@@ -55,7 +58,7 @@ func (s *server) DeleteMenu() http.HandlerFunc {
 	}
 }
 
-func (s *server) GetMenu() http.HandlerFunc {
+func (s *server) GetDish() http.HandlerFunc {
 	type request struct {
 		id int64 `json:"id"`
 	}
@@ -66,12 +69,12 @@ func (s *server) GetMenu() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		menu, err := s.store.Menu().FindById(req.id)
+		dish, err := s.store.Dish().FindById(req.id)
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
 
-		helpers.Respond(w, r, http.StatusOK, menu)
+		helpers.Respond(w, r, http.StatusOK, dish)
 	}
 }
