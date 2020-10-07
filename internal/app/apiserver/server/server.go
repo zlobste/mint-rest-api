@@ -5,7 +5,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
-	
+
 	"github.com/zlobste/mint-rest-api/internal/app/apiserver/middlewares"
 	"github.com/zlobste/mint-rest-api/internal/app/store"
 )
@@ -43,4 +43,8 @@ func (s *server) ConfigureRouter() {
 		menuRouter.HandleFunc("/create", s.CreateMenu()).Methods("POST")
 		menuRouter.HandleFunc("/delete", s.DeleteMenu()).Methods("DELETE")
 		menuRouter.HandleFunc("/info", s.GetMenu()).Methods("GET")
+	orderRouter := apiRouter.PathPrefix("/order").Subrouter()
+		orderRouter.HandleFunc("/create", s.CreateOrder()).Methods("POST")
+		orderRouter.HandleFunc("/cancel", s.CancelOrder()).Methods("UPDATE")
+		orderRouter.HandleFunc("/info", s.GetOrder()).Methods("GET")
 }
