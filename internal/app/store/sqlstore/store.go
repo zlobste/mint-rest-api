@@ -2,7 +2,7 @@ package sqlstore
 
 import (
 	"database/sql"
-	
+	_ "github.com/lib/pq"
 	"github.com/zlobste/mint-rest-api/internal/app/store"
 )
 

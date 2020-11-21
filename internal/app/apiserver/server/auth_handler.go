@@ -20,7 +20,7 @@ func (s *server) SignIn() http.HandlerFunc {
 	type request struct {
 		Email string    `json:"email"`
 		Password string `json:"password"`
-		Type string		`json:"type"`
+		Role string		`json:"role"`
 	}
 
 	type JWT struct {
@@ -35,7 +35,7 @@ func (s *server) SignIn() http.HandlerFunc {
 		}
 
 		var id int64
-		if req.Type == "user" {
+		if req.Role == "user" {
 			user, err := s.store.User().FindByEmail(req.Email)
 			if err != nil || !user.ComparePassword(req.Password) {
 				helpers.Error(w, r, http.StatusUnauthorized, errIncorrectEmailOrPassword)
@@ -43,12 +43,12 @@ func (s *server) SignIn() http.HandlerFunc {
 			}
 			id = user.Id
 		} else {
-			organizatin, err := s.store.User().FindByEmail(req.Email)
-			if err != nil || !organizatin.ComparePassword(req.Password) {
+			organization, err := s.store.User().FindByEmail(req.Email)
+			if err != nil || !organization.ComparePassword(req.Password) {
 				helpers.Error(w, r, http.StatusUnauthorized, errIncorrectEmailOrPassword)
 				return
 			}
-			id = organizatin.Id
+			id = organization.Id
 		}
 
 		token, err := helpers.CreateJWT(id)
@@ -64,9 +64,10 @@ func (s *server) SignIn() http.HandlerFunc {
 // UserSignUp handler for creating new users
 func (s *server) SignUp() http.HandlerFunc {
 	type request struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-		Type string		`json:"type"`
+		Email       string  `json:"email"`
+		Name        string  `json:"name"`
+		Password    string  `json:"password"`
+		Role        string  `json:"role"`
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -76,9 +77,10 @@ func (s *server) SignUp() http.HandlerFunc {
 			return
 		}
 
-		if req.Type == "user" {
+		if req.Role == "user" {
 			u := &models.User{
 				Email: req.Email,
+				Name: req.Name,
 				Password:req.Password,
 			}
 			if err := s.store.User().Create(u); err != nil {

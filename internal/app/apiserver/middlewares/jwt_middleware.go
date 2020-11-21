@@ -11,7 +11,7 @@ func TokenAuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		err := helpers.TokenValid(r)
 		if err != nil {
-			s.error(w, r, http.StatusUnauthorized, err)
+			helpers.Error(w, r, http.StatusUnauthorized, err)
 			return
 		}
 		next.ServeHTTP(w, r)
