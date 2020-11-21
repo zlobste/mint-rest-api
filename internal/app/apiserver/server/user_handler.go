@@ -3,7 +3,7 @@ package server
 import (
 	"net/http"
 	
-	"github.com/zlobste/mint-rest-api/internal/app/apiserver/helpers"
+	"github.com/zlobste/mint-rest-api/internal/app/apiserver/server/helpers"
 )
 
 func (s *server) GetUser() http.HandlerFunc {

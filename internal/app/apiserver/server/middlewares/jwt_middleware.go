@@ -3,7 +3,7 @@ package middlewares
 import (
 	"net/http"
 	
-	"github.com/zlobste/mint-rest-api/internal/app/apiserver/helpers"
+	"github.com/zlobste/mint-rest-api/internal/app/apiserver/server/helpers"
 )
 
 // TokenAuthMiddleware verify token

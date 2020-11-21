@@ -1,8 +1,9 @@
 package server
 
 import (
-	"github.com/zlobste/mint-rest-api/internal/app/apiserver/helpers"
 	"net/http"
+	
+	"github.com/zlobste/mint-rest-api/internal/app/apiserver/server/helpers"
 )
 
 func (s *server) GetOrganization() http.HandlerFunc {

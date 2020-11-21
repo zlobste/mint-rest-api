@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-
-	"github.com/zlobste/mint-rest-api/internal/app/apiserver/helpers"
+	
+	"github.com/zlobste/mint-rest-api/internal/app/apiserver/server/helpers"
 	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
 
@@ -57,7 +57,7 @@ func (s *server) SignIn() http.HandlerFunc {
 			return
 		}
 
-		helpers.Respond(w, r, http.StatusOK, &JWT{Token:token})
+		helpers.Respond(w, r, http.StatusOK, &JWT{Token: token})
 	}
 }
 
