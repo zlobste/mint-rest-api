@@ -36,16 +36,18 @@ func (o *OrderRepository) FindById(id int64) (*models.Order, error) {
 
 func (o *OrderRepository) Cancel(id int64) error {
 	model := &models.Order{}
-	if err := o.store.db.QueryRow("SELECT id, in_progress FROM orders WHERE id=$1", id).
-		Scan(&model.Id, &model.InProgress); err != nil {
+	if err := o.store.db.QueryRow("SELECT id, status FROM orders WHERE id=$1", id).
+		Scan(&model.Id, &model.Status); err != nil {
 		return err
 	}
 	
-	if model.InProgress {
+	if model.Status == models.PENDING {
 		return errors.New("Order has already in progress!")
+	} else if model.Status == models.REJECTED {
+		return errors.New("Order is rejected!")
 	}
 	
-	_, err := o.store.db.Exec("UPDATE orders SET canceled = $1 where id = $2", true, id)
+	_, err := o.store.db.Exec("UPDATE orders SET status = $1 where id = $2",  models.REJECTED, id)
 	return err
 }
 
