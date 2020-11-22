@@ -56,7 +56,7 @@ func (s *server) SignUp() http.HandlerFunc {
 		Email       string  `json:"email"`
 		Name        string  `json:"name"`
 		Password    string  `json:"password"`
-		Role        string  `json:"role"`
+		Role        int64   `json:"role"`
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -69,7 +69,8 @@ func (s *server) SignUp() http.HandlerFunc {
 		u := &models.User{
 			Email: req.Email,
 			Name: req.Name,
-			Password:req.Password,
+			Password: req.Password,
+			Role: req.Role,
 		}
 		if err := s.store.User().Create(u); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)

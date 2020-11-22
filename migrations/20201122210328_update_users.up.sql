@@ -1,0 +1,5 @@
+ALTER TABLE users
+    DROP COLUMN role;
+
+ALTER TABLE users
+    ADD role INTEGER NOT NULL DEFAULT 2;
