@@ -14,18 +14,17 @@ func (d *DishRepository) Create(model *models.Dish) error {
 	}
 	
 	return d.store.db.QueryRow(
-		"INSERT INTO dishes (name, description, cost, menu_id) VALUES ($1,$2, $3, $4) RETURNING id",
-		model.Name,
+		"INSERT INTO dishes (name, description, cost) VALUES ($1,$2, $3, $4) RETURNING id",
+		model.Title,
 		model.Description,
 		model.Cost,
-		model.MenuId,
 	).Scan(&model.Id)
 }
 
 func (d *DishRepository) FindById(id int64) (*models.Dish, error) {
 	model := &models.Dish{}
-	if err := d.store.db.QueryRow("SELECT id, title, description, organization_id FROM dishes WHERE id=$1", id).
-		Scan(&model.Id, &model.Name, &model.Description, &model.Cost, &model.MenuId); err != nil {
+	if err := d.store.db.QueryRow("SELECT id, title, description, disabled FROM dishes WHERE id=$1", id).
+		Scan(&model.Id, &model.Title, &model.Description, &model.Cost, &model.Disabled); err != nil {
 		return nil, err
 	}
 	return model, nil
@@ -37,7 +36,7 @@ func (d *DishRepository) DeleteById(id int64) error {
 }
 
 func (d *DishRepository) GetAllDishes() ([]models.Dish, error) {
-	rows, err := d.store.db.Query("select * from dishes")
+	rows, err := d.store.db.Query("SELECT * FROM dishes WHERE disabled = false")
 	if err != nil {
 		panic(err)
 	}
@@ -46,7 +45,7 @@ func (d *DishRepository) GetAllDishes() ([]models.Dish, error) {
 	
 	for rows.Next(){
 		model := models.Dish{}
-		err := rows.Scan(&model.Id, &model.Name, &model.Description, &model.Cost, &model.MenuId)
+		err := rows.Scan(&model.Id, &model.Title, &model.Description, &model.Cost)
 		if err != nil{
 			return  nil, err
 		}

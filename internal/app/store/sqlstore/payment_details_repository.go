@@ -14,17 +14,17 @@ func (p *PaymentDetailsRepository) Create(model *models.PaymentDetails) error {
 	}
 
 	return p.store.db.QueryRow(
-		"INSERT INTO payment_details (bank, account, organization_id) VALUES ($1,$2, $3) RETURNING id",
+		"INSERT INTO payment_details (bank, account, institution_id) VALUES ($1,$2, $3) RETURNING id",
 		model.Bank,
 		model.Account,
-		model.institutionId,
+		model.InstitutionId,
 	).Scan(&model.Id)
 }
 
 func (p *PaymentDetailsRepository) FindById(id int64) (*models.PaymentDetails, error) {
 	model := &models.PaymentDetails{}
-	if err := p.store.db.QueryRow("SELECT id, bank, account, organization_id FROM payment_details WHERE id=$1", id).
-		Scan(&model.Id, &model.Bank, &model.Account, &model.institutionId); err != nil {
+	if err := p.store.db.QueryRow("SELECT id, bank, account, institution_id FROM payment_details WHERE id=$1", id).
+		Scan(&model.Id, &model.Bank, &model.Account, &model.InstitutionId); err != nil {
 		return nil, err
 	}
 	return model, nil

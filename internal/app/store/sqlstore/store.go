@@ -12,6 +12,7 @@ type Store struct {
 	orderRepository             *OrderRepository
 	dishRepository              *DishRepository
 	paymentDetailsRepository    *PaymentDetailsRepository
+	institutionRepository       *InstitutionRepository
 }
 
 func New(db *sql.DB) *Store {
@@ -48,6 +49,16 @@ func (s *Store) Dish() store.DishRepository {
 		store: s,
 	}
 	return s.dishRepository
+}
+
+func (s *Store) Institution() store.InstitutionRepository {
+	if s.institutionRepository != nil {
+		return s.institutionRepository
+	}
+	s.institutionRepository = &InstitutionRepository{
+		store: s,
+	}
+	return s.institutionRepository
 }
 
 func (s *Store) PaymentDetails() store.PaymentDetailsRepository {

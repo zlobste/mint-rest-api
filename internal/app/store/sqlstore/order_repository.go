@@ -26,8 +26,8 @@ func (o *OrderRepository) Create(model *models.Order) error {
 
 func (o *OrderRepository) FindById(id int64) (*models.Order, error) {
 	model := &models.Order{}
-	if err := o.store.db.QueryRow("SELECT id, cost, datetime, canceled, in_progress, dish_id, user_id FROM orders WHERE id=$1", id).
-		Scan(&model.Id, &model.Cost, &model.DateTime, &model.Canceled, &model.InProgress, &model.DishId, &model.UserId); err != nil {
+	if err := o.store.db.QueryRow("SELECT id, cost, datetime, status, dish_id, user_id FROM orders WHERE id=$1", id).
+		Scan(&model.Id, &model.Cost, &model.DateTime, &model.Status, &model.DishId, &model.UserId); err != nil {
 		return nil, err
 	}
 	return model, nil

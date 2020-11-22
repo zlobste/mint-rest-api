@@ -28,3 +28,9 @@ type PaymentDetailsRepository interface {
 	FindById(id int64) (*models.PaymentDetails, error)
 	DeleteById(id int64) error
 }
+
+type InstitutionRepository interface {
+	Create(model *models.Institution) error
+	FindByTitle(title string) ([]models.Institution, error)
+	DeleteById(id int64) error
+}
