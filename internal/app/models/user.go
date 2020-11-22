@@ -9,6 +9,12 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
+const (
+	OWNER = iota
+	ADMIN
+	USER
+)
+
 type User struct {
 	Id          int64   `json:"id"`
 	Name        string  `json:"name"`

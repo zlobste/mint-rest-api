@@ -6,6 +6,12 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
+const (
+	PENDING = iota
+	READY
+	REJECTED
+)
+
 type Order struct {
 	Id              int64       `json:"id"`
 	Cost            float64     `json:"cost"`
