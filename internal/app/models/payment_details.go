@@ -5,10 +5,10 @@ import (
 )
 
 type PaymentDetails struct {
-	Id              int64   `json:"id"`
-	Bank            string  `json:"bank"`
-	Account         string  `json:"account"`
-	OrganizationId  string  `json:"organization_id"`
+	Id            int64  `json:"id"`
+	Bank          string `json:"bank"`
+	Account       string `json:"account"`
+	InstitutionId string `json:"institution_id"`
 }
 
 func (p *PaymentDetails) Validate() error {
@@ -16,6 +16,6 @@ func (p *PaymentDetails) Validate() error {
 		p,
 		validation.Field(&p.Bank, validation.Required),
 		validation.Field(&p.Account, validation.Required),
-		validation.Field(&p.OrganizationId, validation.Required),
+		validation.Field(&p.InstitutionId, validation.Required),
 	)
 }

@@ -14,7 +14,7 @@ type User struct {
 	Name        string  `json:"name"`
 	Email       string  `json:"email"`
 	Password    string  `json:"password,omitempty"`
-	Role        string  `json:"role"`
+	Role        int64   `json:"role"`
 	Balance     string  `json:"balance"`
 	Blocked     bool    `json:"blocked"`
 }

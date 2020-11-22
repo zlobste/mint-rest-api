@@ -22,9 +22,9 @@ func (s *server) CreatePaymentDetails() http.HandlerFunc {
 			return
 		}
 		pd := &models.PaymentDetails{
-			Bank: req.Bank,
-			Account: req.Account,
-			OrganizationId: req.OrganizationId,
+			Bank:          req.Bank,
+			Account:       req.Account,
+			institutionId: req.OrganizationId,
 		}
 		if err := s.store.PaymentDetails().Create(pd); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
