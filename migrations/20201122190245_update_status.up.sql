@@ -1,0 +1,12 @@
+ALTER TABLE orders
+    DROP COLUMN canceled,
+    DROP COLUMN in_progress;
+
+ALTER TABLE orders
+    ADD status INTEGER NOT NULL DEFAULT 0;
+
+ALTER TABLE users
+    DROP COLUMN role;
+
+ALTER TABLE users
+    ADD role INTEGER NOT NULL DEFAULT 1;

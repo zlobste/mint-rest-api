@@ -10,8 +10,7 @@ type Order struct {
 	Id              int64       `json:"id"`
 	Cost            float64     `json:"cost"`
 	DateTime        time.Time   `json:"datetime"`
-	Canceled        bool        `json:"canceled"`
-	InProgress      bool        `json:"in_progress"`
+	Status          int64       `json:"status"`
 	DishId          string      `json:"dish_id"`
 	UserId          string      `json:"user_id"`
 }
