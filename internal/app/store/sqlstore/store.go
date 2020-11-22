@@ -9,8 +9,6 @@ import (
 type Store struct {
 	db                          *sql.DB
 	userRepository              *UserRepository
-	organizationRepository      *OrganizationRepository
-	menuRepository              *MenuRepository
 	orderRepository             *OrderRepository
 	dishRepository              *DishRepository
 	paymentDetailsRepository    *PaymentDetailsRepository
@@ -30,26 +28,6 @@ func (s *Store) User() store.UserRepository {
 		store: s,
 	}
 	return s.userRepository
-}
-
-func (s *Store) Organization() store.OrganizationRepository {
-	if s.organizationRepository != nil {
-		return s.organizationRepository
-	}
-	s.organizationRepository = &OrganizationRepository{
-		store: s,
-	}
-	return s.organizationRepository
-}
-
-func (s *Store) Menu() store.MenuRepository {
-	if s.menuRepository != nil {
-		return s.menuRepository
-	}
-	s.menuRepository = &MenuRepository{
-		store: s,
-	}
-	return s.menuRepository
 }
 
 func (s *Store) Order() store.OrderRepository {

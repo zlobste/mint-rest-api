@@ -10,18 +10,6 @@ type UserRepository interface {
 	FindById(id int64) (*models.User, error)
 }
 
-type OrganizationRepository interface {
-	Create(model *models.Organization) error
-	FindByEmail(email string) (*models.Organization, error)
-	FindById(id int64) (*models.Organization, error)
-}
-
-type MenuRepository interface {
-	Create(model *models.Menu) error
-	FindById(id int64) (*models.Menu, error)
-	DeleteById(id int64) error
-}
-
 type OrderRepository interface {
 	Create(model *models.Order) error
 	FindById(id int64) (*models.Order, error)

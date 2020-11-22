@@ -14,6 +14,7 @@ type User struct {
 	Name        string  `json:"name"`
 	Email       string  `json:"email"`
 	Password    string  `json:"password,omitempty"`
+	Role        string  `json:"role"`
 }
 
 func (u *User) EncryptPassword() error {
@@ -34,6 +35,7 @@ func (u *User) Validate() error {
 		validation.Field(&u.Name, validation.Required, validation.Length(6, 100)),
 		validation.Field(&u.Email, validation.Required, is.Email),
 		validation.Field(&u.Password, validation.Required, validation.Length(6, 100)),
+		validation.Field(&u.Role, validation.Required),
 	)
 }
 

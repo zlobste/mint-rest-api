@@ -15,14 +15,6 @@ func (s *server) ConfigureRouter() {
 	userRouter.Use(middlewares.TokenAuthMiddleware)
 	userRouter.HandleFunc("/info", s.GetUser()).Methods("GET")
 	
-	organizationRouter := apiRouter.PathPrefix("/organization").Subrouter()
-	organizationRouter.HandleFunc("/info", s.GetUser()).Methods("GET")
-	
-	menuRouter := apiRouter.PathPrefix("/menu").Subrouter()
-	menuRouter.HandleFunc("/info", s.GetMenu()).Methods("GET")
-	menuRouter.HandleFunc("/create", s.CreateMenu()).Methods("POST")
-	menuRouter.HandleFunc("/delete", s.DeleteMenu()).Methods("DELETE")
-	
 	orderRouter := apiRouter.PathPrefix("/order").Subrouter()
 	orderRouter.HandleFunc("/info", s.GetOrder()).Methods("GET")
 	orderRouter.HandleFunc("/create", s.CreateOrder()).Methods("POST")
