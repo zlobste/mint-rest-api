@@ -48,3 +48,4 @@ func (o *OrderRepository) Cancel(id int64) error {
 	_, err := o.store.db.Exec("UPDATE orders SET canceled = $1 where id = $2", true, id)
 	return err
 }
+

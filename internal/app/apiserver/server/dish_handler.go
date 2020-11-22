@@ -10,10 +10,9 @@ import (
 
 func (s *server) CreateDish() http.HandlerFunc {
 	type request struct {
-		Name            string  `json:"name"`
+		Title           string  `json:"title"`
 		Description     string  `json:"description"`
 		Cost            float64 `json:"cost"`
-		MenuId          int64   `json:"menu_id"`
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -23,10 +22,9 @@ func (s *server) CreateDish() http.HandlerFunc {
 			return
 		}
 		d := &models.Dish{
-			Name: req.Name,
+			Title: req.Title,
 			Description: req.Description,
 			Cost: req.Cost,
-			MenuId: req.MenuId,
 		}
 		if err := s.store.Dish().Create(d); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
