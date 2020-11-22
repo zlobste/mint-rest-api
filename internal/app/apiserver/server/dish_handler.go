@@ -13,7 +13,7 @@ func (s *server) CreateDish() http.HandlerFunc {
 		Name            string  `json:"name"`
 		Description     string  `json:"description"`
 		Cost            float64 `json:"cost"`
-		MenuId          string  `json:"menu_id"`
+		MenuId          int64   `json:"menu_id"`
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {

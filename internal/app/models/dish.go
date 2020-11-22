@@ -9,7 +9,7 @@ type Dish struct {
 	Name            string  `json:"name"`
 	Description     string  `json:"description"`
 	Cost            float64 `json:"cost"`
-	MenuId          string  `json:"menu_id"`
+	MenuId          int64  `json:"menu_id"`
 }
 
 func (d *Dish) Validate() error {
