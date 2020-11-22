@@ -18,9 +18,9 @@ var (
 func (s *server) SignIn() http.HandlerFunc {
 
 	type request struct {
-		Email string    `json:"email"`
-		Password string `json:"password"`
-		Role string		`json:"role"`
+		Email       string  `json:"email"`
+		Password    string  `json:"password"`
+		Role        int64   `json:"role"`
 	}
 
 	type JWT struct {
@@ -33,25 +33,14 @@ func (s *server) SignIn() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-
-		var id int64
-		if req.Role == "user" {
-			user, err := s.store.User().FindByEmail(req.Email)
-			if err != nil || !user.ComparePassword(req.Password) {
-				helpers.Error(w, r, http.StatusUnauthorized, errIncorrectEmailOrPassword)
-				return
-			}
-			id = user.Id
-		} else {
-			organization, err := s.store.User().FindByEmail(req.Email)
-			if err != nil || !organization.ComparePassword(req.Password) {
-				helpers.Error(w, r, http.StatusUnauthorized, errIncorrectEmailOrPassword)
-				return
-			}
-			id = organization.Id
+		
+		user, err := s.store.User().FindByEmail(req.Email)
+		if err != nil || !user.ComparePassword(req.Password) {
+			helpers.Error(w, r, http.StatusUnauthorized, errIncorrectEmailOrPassword)
+			return
 		}
 
-		token, err := helpers.CreateJWT(id)
+		token, err := helpers.CreateJWT(user.Id)
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
@@ -76,30 +65,17 @@ func (s *server) SignUp() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-
-		if req.Role == "user" {
-			u := &models.User{
-				Email: req.Email,
-				Name: req.Name,
-				Password:req.Password,
-			}
-			if err := s.store.User().Create(u); err != nil {
-				helpers.Error(w, r, http.StatusUnprocessableEntity, err)
-				return
-			}
-			u.Sanitize()
-			helpers.Respond(w, r, http.StatusCreated, u)
-		} else {
-			o := &models.Organization{
-				Email: req.Email,
-				Password:req.Password,
-			}
-			if err := s.store.Organization().Create(o); err != nil {
-				helpers.Error(w, r, http.StatusUnprocessableEntity, err)
-				return
-			}
-			o.Sanitize()
-			helpers.Respond(w, r, http.StatusCreated, o)
+		
+		u := &models.User{
+			Email: req.Email,
+			Name: req.Name,
+			Password:req.Password,
 		}
+		if err := s.store.User().Create(u); err != nil {
+			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
+			return
+		}
+		u.Sanitize()
+		helpers.Respond(w, r, http.StatusCreated, u)
 	}
 }

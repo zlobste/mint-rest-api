@@ -12,7 +12,7 @@ func (s *server) CreatePaymentDetails() http.HandlerFunc {
 	type request struct {
 		Bank            string  `json:"bank"`
 		Account         string  `json:"account"`
-		OrganizationId  string  `json:"organization_id"`
+		InstitutionId  string   `json:"institutionId_id"`
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +24,7 @@ func (s *server) CreatePaymentDetails() http.HandlerFunc {
 		pd := &models.PaymentDetails{
 			Bank:          req.Bank,
 			Account:       req.Account,
-			institutionId: req.OrganizationId,
+			InstitutionId: req.InstitutionId,
 		}
 		if err := s.store.PaymentDetails().Create(pd); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
