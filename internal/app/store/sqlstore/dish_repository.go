@@ -35,3 +35,23 @@ func (d *DishRepository) DeleteById(id int64) error {
 	_, err := d.store.db.Exec("DELETE FROM dishes where id = $1", id)
 	return err
 }
+
+func (d *DishRepository) GetAllDishes() ([]models.Dish, error) {
+	rows, err := d.store.db.Query("select * from dishes")
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+	dishes := []models.Dish{}
+	
+	for rows.Next(){
+		model := models.Dish{}
+		err := rows.Scan(&model.Id, &model.Name, &model.Description, &model.Cost, &model.MenuId)
+		if err != nil{
+			return  nil, err
+		}
+		dishes = append(dishes, model)
+	}
+	
+	return dishes, nil
+}

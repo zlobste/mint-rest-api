@@ -78,3 +78,16 @@ func (s *server) GetDish() http.HandlerFunc {
 		helpers.Respond(w, r, http.StatusOK, dish)
 	}
 }
+
+func (s *server) GetAllDishes() http.HandlerFunc {
+	
+	return func(w http.ResponseWriter, r *http.Request) {
+		dishes, err := s.store.Dish().GetAllDishes()
+		if err != nil {
+			helpers.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+		
+		helpers.Respond(w, r, http.StatusOK, dishes)
+	}
+}

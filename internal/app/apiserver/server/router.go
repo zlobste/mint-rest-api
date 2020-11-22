@@ -27,6 +27,7 @@ func (s *server) ConfigureRouter() {
 		dishRouter.HandleFunc("/create", s.CreateDish()).Methods("POST")
 		dishRouter.HandleFunc("/delete", s.DeleteDish()).Methods("DELETE")
 		dishRouter.HandleFunc("/info", s.GetDish()).Methods("GET")
+		dishRouter.HandleFunc("/all", s.GetAllDishes()).Methods("GET")
 	paymentRouter := apiRouter.PathPrefix("/payment").Subrouter()
 		paymentRouter.HandleFunc("/create", s.CreatePaymentDetails()).Methods("POST")
 		paymentRouter.HandleFunc("/delete", s.DeletePaymentDetails()).Methods("DELETE")
