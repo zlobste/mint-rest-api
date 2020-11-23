@@ -12,7 +12,7 @@ func (s *server) CreatePaymentDetails() http.HandlerFunc {
 	type request struct {
 		Bank            string  `json:"bank"`
 		Account         string  `json:"account"`
-		InstitutionId  string   `json:"institutionId_id"`
+		InstitutionId   string  `json:"institutionId_id"`
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
