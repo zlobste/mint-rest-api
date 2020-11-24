@@ -92,33 +92,3 @@ func (orderRepository *OrderRepository) GetOrderToExecute() (*models.Order, erro
 	
 	return orders[0], nil
 }
-
-func (orderRepository *OrderRepository) CalculateSale(userId uint64, dishId uint64) (float64, error) {
-	var average float64
-	
-	if err := orderRepository.store.db.QueryRow(
-		"SELECT AVG(cost::decimal) FROM orders WHERE status = 2 AND user_id = $1",
-		userId,
-	).Scan(&average); err != nil {
-		return 0, err
-	}
-	
-	dish := &models.Dish{}
-	if err := orderRepository.store.db.QueryRow(
-		"SELECT cost::decimal, disabled FROM dishes WHERE id=$1",
-		dishId,
-	).Scan(&dish.Cost, &dish.Disabled); err != nil {
-		return 0, err
-	}
-	
-	if (dish.Disabled == true) {
-		return 0, errors.New("Disabled dish!")
-	}
-	
-	var sale float64 = 0;
-	if (dish.Cost > average) {
-		sale = dish.Cost * 0.1
-	}
-	
-	return sale, nil
-}

@@ -89,3 +89,37 @@ func (server *server) GetAllDishes() http.HandlerFunc {
 		helpers.Respond(w, r, http.StatusOK, dishes)
 	}
 }
+
+func (server *server) CalculateSale() http.HandlerFunc {
+	type request struct {
+		dishId  int64   `json:"dishId"`
+	}
+	
+	return func(w http.ResponseWriter, r *http.Request) {
+		tokenAuth, err := helpers.ExtractTokenMetadata(r)
+		if err != nil {
+			helpers.Error(w, r, http.StatusUnauthorized, err)
+			return
+		}
+		
+		user, err := server.store.User().FindById(tokenAuth.UserId)
+		if err != nil {
+			helpers.Error(w, r, http.StatusUnauthorized, err)
+			return
+		}
+		
+		req := &request{}
+		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+			helpers.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+		
+		sale, err := server.store.Dish().CalculateSale(user.Id, req.dishId)
+		if err != nil {
+			helpers.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+		
+		helpers.Respond(w, r, http.StatusOK, sale)
+	}
+}

@@ -23,6 +23,7 @@ type DishRepository interface {
 	FindById(id int64) (*models.Dish, error)
 	DeleteById(id int64) error
 	GetAllDishes() ([]models.Dish, error)
+	CalculateSale(userId int64, dishId int64) (float64, error)
 }
 
 type PaymentDetailsRepository interface {
