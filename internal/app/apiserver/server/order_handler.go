@@ -49,7 +49,7 @@ func (server *server) CancelOrder() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		err := server.store.Order().Cancel(req.id)
+		err := server.store.Order().CancelOrder(req.id)
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return

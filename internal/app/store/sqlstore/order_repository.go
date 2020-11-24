@@ -36,7 +36,7 @@ func (orderRepository *OrderRepository) FindById(id int64) (*models.Order, error
 }
 
 
-func (orderRepository *OrderRepository) Cancel(id int64) error {
+func (orderRepository *OrderRepository) CancelOrder(id int64) error {
 	model := &models.Order{}
 	if err := orderRepository.store.db.QueryRow("SELECT id, status FROM orders WHERE id=$1", id).
 		Scan(&model.Id, &model.Status); err != nil {
@@ -54,7 +54,7 @@ func (orderRepository *OrderRepository) Cancel(id int64) error {
 }
 
 // For IOT
-func (orderRepository *OrderRepository) Ready(id int64) error {
+func (orderRepository *OrderRepository) SetStatusReady(id int64) error {
 	model := &models.Order{}
 	if err := orderRepository.store.db.QueryRow("SELECT id, status FROM orders WHERE id=$1", id).
 		Scan(&model.Id, &model.Status); err != nil {
@@ -69,16 +69,6 @@ func (orderRepository *OrderRepository) Ready(id int64) error {
 	
 	_, err := orderRepository.store.db.Exec("UPDATE orders SET status = $1 where id = $2",  models.READY, id)
 	return err
-}
-
-func (orderRepository *OrderRepository) getOrderToExecute() (*models.Order, error) {
-	model := &models.Order{}
-	if err := orderRepository.store.db.QueryRow(
-		"SELECT id, cost, datetime, status, dish_id, user_id FROM orders WHERE status = 0 ORDER BY datetime ASC",
-		).Scan(&model.Id, &model.Cost, &model.DateTime, &model.Status, &model.DishId, &model.UserId); err != nil {
-		return nil, err
-	}
-	return model, nil
 }
 
 func (orderRepository *OrderRepository) GetOrderToExecute() (*models.Order, error) {

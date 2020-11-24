@@ -13,7 +13,8 @@ type UserRepository interface {
 type OrderRepository interface {
 	Create(model *models.Order) error
 	FindById(id int64) (*models.Order, error)
-	Cancel(id int64) error
+	CancelOrder(id int64) error
+	SetStatusReady(id int64)
 }
 
 type DishRepository interface {
@@ -21,6 +22,7 @@ type DishRepository interface {
 	FindById(id int64) (*models.Dish, error)
 	DeleteById(id int64) error
 	GetAllDishes() ([]models.Dish, error)
+	GetOrderToExecute() (*models.Order, error)
 }
 
 type PaymentDetailsRepository interface {
