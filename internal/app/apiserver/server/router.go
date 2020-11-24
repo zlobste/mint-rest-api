@@ -21,6 +21,8 @@ func (server *server) ConfigureRouter() {
 	editOrderRouter.Use(middlewares.TokenAuthMiddleware)
 	editOrderRouter.HandleFunc("/create", server.CreateOrder()).Methods("POST")
 	editOrderRouter.HandleFunc("/cancel", server.CancelOrder()).Methods("UPDATE")
+	editOrderRouter.HandleFunc("/ready", server.SetStatusReady()).Methods("UPDATE")
+	editOrderRouter.HandleFunc("/execute", server.GetOrderToExecute()).Methods("UPDATE")
 	
 	dishRouter := apiRouter.PathPrefix("/dish").Subrouter()
 	dishRouter.HandleFunc("/info", server.GetDish()).Methods("GET")
