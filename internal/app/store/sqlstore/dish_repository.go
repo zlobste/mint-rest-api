@@ -23,10 +23,13 @@ func (dishRepository *DishRepository) Create(model *models.Dish) error {
 
 func (dishRepository *DishRepository) FindById(id int64) (*models.Dish, error) {
 	model := &models.Dish{}
-	if err := dishRepository.store.db.QueryRow("SELECT id, title, description, disabled FROM dishes WHERE id=$1", id).
-		Scan(&model.Id, &model.Title, &model.Description, &model.Cost, &model.Disabled); err != nil {
+	if err := dishRepository.store.db.QueryRow(
+		"SELECT id, title, description, disabled FROM dishes WHERE id=$1",
+		id,
+	).Scan(&model.Id, &model.Title, &model.Description, &model.Cost, &model.Disabled); err != nil {
 		return nil, err
 	}
+	
 	return model, nil
 }
 

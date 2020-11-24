@@ -21,7 +21,10 @@ func (institutionRepository *InstitutionRepository) Create(model *models.Institu
 }
 
 func (institutionRepository *InstitutionRepository) FindByTitle(title string) ([]models.Institution, error) {
-	rows, err := institutionRepository.store.db.Query("SELECT * FROM institutions WHERE disabled = false AND title LIKE $1", title + "%")
+	rows, err := institutionRepository.store.db.Query(
+		"SELECT * FROM institutions WHERE disabled = false AND title LIKE $1",
+		title + "%",
+	)
 	if err != nil {
 		panic(err)
 	}

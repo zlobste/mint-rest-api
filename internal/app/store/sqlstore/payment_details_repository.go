@@ -23,8 +23,10 @@ func (paymentDetailsRepository *PaymentDetailsRepository) Create(model *models.P
 
 func (paymentDetailsRepository *PaymentDetailsRepository) FindById(id int64) (*models.PaymentDetails, error) {
 	model := &models.PaymentDetails{}
-	if err := paymentDetailsRepository.store.db.QueryRow("SELECT id, bank, account, institution_id FROM payment_details WHERE id=$1", id).
-		Scan(&model.Id, &model.Bank, &model.Account, &model.InstitutionId); err != nil {
+	if err := paymentDetailsRepository.store.db.QueryRow(
+		"SELECT id, bank, account, institution_id FROM payment_details WHERE id=$1",
+		id,
+	).Scan(&model.Id, &model.Bank, &model.Account, &model.InstitutionId); err != nil {
 		return nil, err
 	}
 	return model, nil
