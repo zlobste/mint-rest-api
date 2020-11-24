@@ -82,7 +82,7 @@ func (dishRepository *DishRepository) CalculateSale(userId int64, dishId int64) 
 		return 0, errors.New("Disabled dish!")
 	}
 	
-	var sale float64 = 0;
+	var sale float64 = 0
 	if (dish.Cost > average) {
 		sale = dish.Cost * 0.1
 	}
