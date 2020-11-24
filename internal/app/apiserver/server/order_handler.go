@@ -9,7 +9,7 @@ import (
 	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
 
-func (s *server) CreateOrder() http.HandlerFunc {
+func (server *server) CreateOrder() http.HandlerFunc {
 	type request struct {
 		Cost            float64     `json:"cost"`
 		DateTime        time.Time   `json:"datetime"`
@@ -29,7 +29,7 @@ func (s *server) CreateOrder() http.HandlerFunc {
 			DishId: req.DishId,
 			UserId: req.UserId,
 		}
-		if err := s.store.Order().Create(o); err != nil {
+		if err := server.store.Order().Create(o); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
@@ -38,7 +38,7 @@ func (s *server) CreateOrder() http.HandlerFunc {
 	}
 }
 
-func (s *server) CancelOrder() http.HandlerFunc {
+func (server *server) CancelOrder() http.HandlerFunc {
 
 	type request struct {
 		id int64 `json:"id"`
@@ -49,7 +49,7 @@ func (s *server) CancelOrder() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		err := s.store.Order().Cancel(req.id)
+		err := server.store.Order().Cancel(req.id)
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
@@ -59,7 +59,7 @@ func (s *server) CancelOrder() http.HandlerFunc {
 	}
 }
 
-func (s *server) GetOrder() http.HandlerFunc {
+func (server *server) GetOrder() http.HandlerFunc {
 	type request struct {
 		id int64 `json:"id"`
 	}
@@ -70,7 +70,7 @@ func (s *server) GetOrder() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		order, err := s.store.Order().FindById(req.id)
+		order, err := server.store.Order().FindById(req.id)
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return

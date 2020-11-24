@@ -8,7 +8,7 @@ import (
 	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
 
-func (s *server) CreateDish() http.HandlerFunc {
+func (server *server) CreateDish() http.HandlerFunc {
 	type request struct {
 		Title       string  `json:"title"`
 		Description string  `json:"description"`
@@ -26,7 +26,7 @@ func (s *server) CreateDish() http.HandlerFunc {
 			Description: req.Description,
 			Cost: req.Cost,
 		}
-		if err := s.store.Dish().Create(d); err != nil {
+		if err := server.store.Dish().Create(d); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
@@ -35,7 +35,7 @@ func (s *server) CreateDish() http.HandlerFunc {
 	}
 }
 
-func (s *server) DeleteDish() http.HandlerFunc {
+func (server *server) DeleteDish() http.HandlerFunc {
 
 	type request struct {
 		id int64 `json:"id"`
@@ -46,7 +46,7 @@ func (s *server) DeleteDish() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		err := s.store.Dish().DeleteById(req.id)
+		err := server.store.Dish().DeleteById(req.id)
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
@@ -56,7 +56,7 @@ func (s *server) DeleteDish() http.HandlerFunc {
 	}
 }
 
-func (s *server) GetDish() http.HandlerFunc {
+func (server *server) GetDish() http.HandlerFunc {
 	type request struct {
 		id int64 `json:"id"`
 	}
@@ -67,7 +67,7 @@ func (s *server) GetDish() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		dish, err := s.store.Dish().FindById(req.id)
+		dish, err := server.store.Dish().FindById(req.id)
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
@@ -77,10 +77,10 @@ func (s *server) GetDish() http.HandlerFunc {
 	}
 }
 
-func (s *server) GetAllDishes() http.HandlerFunc {
+func (server *server) GetAllDishes() http.HandlerFunc {
 	
 	return func(w http.ResponseWriter, r *http.Request) {
-		dishes, err := s.store.Dish().GetAllDishes()
+		dishes, err := server.store.Dish().GetAllDishes()
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return

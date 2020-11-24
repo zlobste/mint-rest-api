@@ -8,7 +8,7 @@ import (
 	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
 
-func (s *server) CreateInstitution() http.HandlerFunc {
+func (server *server) CreateInstitution() http.HandlerFunc {
 	type request struct {
 		Title   string  `json:"title"`
 		Address string  `json:"address"`
@@ -24,7 +24,7 @@ func (s *server) CreateInstitution() http.HandlerFunc {
 			Title: req.Title,
 			Address: req.Address,
 		}
-		if err := s.store.Institution().Create(i); err != nil {
+		if err := server.store.Institution().Create(i); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
@@ -33,7 +33,7 @@ func (s *server) CreateInstitution() http.HandlerFunc {
 	}
 }
 
-func (s *server) DeleteInstitution() http.HandlerFunc {
+func (server *server) DeleteInstitution() http.HandlerFunc {
 	type request struct {
 		Id int64 `json:"id"`
 	}
@@ -43,7 +43,7 @@ func (s *server) DeleteInstitution() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		err := s.store.Institution().DeleteById(req.Id)
+		err := server.store.Institution().DeleteById(req.Id)
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
@@ -53,7 +53,7 @@ func (s *server) DeleteInstitution() http.HandlerFunc {
 	}
 }
 
-func (s *server) FindInstitutionsByTitle() http.HandlerFunc {
+func (server *server) FindInstitutionsByTitle() http.HandlerFunc {
 	type request struct {
 		Title string `json:"title"`
 	}
@@ -64,7 +64,7 @@ func (s *server) FindInstitutionsByTitle() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		dish, err := s.store.Institution().FindByTitle(req.Title)
+		dish, err := server.store.Institution().FindByTitle(req.Title)
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return

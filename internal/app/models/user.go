@@ -25,32 +25,32 @@ type User struct {
 	Blocked     bool    `json:"blocked"`
 }
 
-func (u *User) EncryptPassword() error {
-	if len(u.Password) == 0 {
+func (user *User) EncryptPassword() error {
+	if len(user.Password) == 0 {
 		return errors.New("Wrong password length!")
 	}
-	enc, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.MinCost)
+	enc, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
 	if err != nil {
 		return err
 	}
-	u.Password = string(enc)
+	user.Password = string(enc)
 	return nil
 }
 
-func (u *User) Validate() error {
+func (user *User) Validate() error {
 	return validation.ValidateStruct(
-		u,
-		validation.Field(&u.Name, validation.Required, validation.Length(6, 100)),
-		validation.Field(&u.Email, validation.Required, is.Email),
-		validation.Field(&u.Password, validation.Required, validation.Length(6, 100)),
-		validation.Field(&u.Role, validation.Required),
+		user,
+		validation.Field(&user.Name, validation.Required, validation.Length(6, 100)),
+		validation.Field(&user.Email, validation.Required, is.Email),
+		validation.Field(&user.Password, validation.Required, validation.Length(6, 100)),
+		validation.Field(&user.Role, validation.Required),
 	)
 }
 
-func (u *User) Sanitize() {
-	u.Password = ""
+func (user *User) Sanitize() {
+	user.Password = ""
 }
 
-func (u *User) ComparePassword(password string) bool {
-	return bcrypt.CompareHashAndPassword([]byte(password), []byte(u.Password)) != nil
+func (user *User) ComparePassword(password string) bool {
+	return bcrypt.CompareHashAndPassword([]byte(password), []byte(user.Password)) != nil
 }

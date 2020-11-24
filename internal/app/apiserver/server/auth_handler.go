@@ -15,7 +15,7 @@ var (
 )
 
 // Login handler for access
-func (s *server) SignIn() http.HandlerFunc {
+func (server *server) SignIn() http.HandlerFunc {
 
 	type request struct {
 		Email       string  `json:"email"`
@@ -34,7 +34,7 @@ func (s *server) SignIn() http.HandlerFunc {
 			return
 		}
 		
-		user, err := s.store.User().FindByEmail(req.Email)
+		user, err := server.store.User().FindByEmail(req.Email)
 		if err != nil || !user.ComparePassword(req.Password) {
 			helpers.Error(w, r, http.StatusUnauthorized, errIncorrectEmailOrPassword)
 			return
@@ -51,7 +51,7 @@ func (s *server) SignIn() http.HandlerFunc {
 }
 
 // UserSignUp handler for creating new users
-func (s *server) SignUp() http.HandlerFunc {
+func (server *server) SignUp() http.HandlerFunc {
 	type request struct {
 		Email       string  `json:"email"`
 		Name        string  `json:"name"`
@@ -72,7 +72,7 @@ func (s *server) SignUp() http.HandlerFunc {
 			Password: req.Password,
 			Role: req.Role,
 		}
-		if err := s.store.User().Create(u); err != nil {
+		if err := server.store.User().Create(u); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}

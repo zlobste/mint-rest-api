@@ -21,52 +21,52 @@ func New(db *sql.DB) *Store {
 	}
 }
 
-func (s *Store) User() store.UserRepository {
-	if s.userRepository != nil {
-		return s.userRepository
+func (store *Store) User() store.UserRepository {
+	if store.userRepository != nil {
+		return store.userRepository
 	}
-	s.userRepository = &UserRepository{
-		store: s,
+	store.userRepository = &UserRepository{
+		store: store,
 	}
-	return s.userRepository
+	return store.userRepository
 }
 
-func (s *Store) Order() store.OrderRepository {
-	if s.orderRepository != nil {
-		return s.orderRepository
+func (store *Store) Order() store.OrderRepository {
+	if store.orderRepository != nil {
+		return store.orderRepository
 	}
-	s.orderRepository = &OrderRepository{
-		store: s,
+	store.orderRepository = &OrderRepository{
+		store: store,
 	}
-	return s.orderRepository
+	return store.orderRepository
 }
 
-func (s *Store) Dish() store.DishRepository {
-	if s.dishRepository != nil {
-		return s.dishRepository
+func (store *Store) Dish() store.DishRepository {
+	if store.dishRepository != nil {
+		return store.dishRepository
 	}
-	s.dishRepository = &DishRepository{
-		store: s,
+	store.dishRepository = &DishRepository{
+		store: store,
 	}
-	return s.dishRepository
+	return store.dishRepository
 }
 
-func (s *Store) Institution() store.InstitutionRepository {
-	if s.institutionRepository != nil {
-		return s.institutionRepository
+func (store *Store) Institution() store.InstitutionRepository {
+	if store.institutionRepository != nil {
+		return store.institutionRepository
 	}
-	s.institutionRepository = &InstitutionRepository{
-		store: s,
+	store.institutionRepository = &InstitutionRepository{
+		store: store,
 	}
-	return s.institutionRepository
+	return store.institutionRepository
 }
 
-func (s *Store) PaymentDetails() store.PaymentDetailsRepository {
-	if s.paymentDetailsRepository != nil {
-		return s.paymentDetailsRepository
+func (store *Store) PaymentDetails() store.PaymentDetailsRepository {
+	if store.paymentDetailsRepository != nil {
+		return store.paymentDetailsRepository
 	}
-	s.paymentDetailsRepository = &PaymentDetailsRepository{
-		store: s,
+	store.paymentDetailsRepository = &PaymentDetailsRepository{
+		store: store,
 	}
-	return s.paymentDetailsRepository
+	return store.paymentDetailsRepository
 }

@@ -11,10 +11,10 @@ type Institution struct {
 	Disabled    bool    `json:"disabled"`
 }
 
-func (i *Institution) Validate() error {
+func (institution *Institution) Validate() error {
 	return validation.ValidateStruct(
-		i,
-		validation.Field(&i.Title, validation.Required),
-		validation.Field(&i.Address, validation.Required),
+		institution,
+		validation.Field(&institution.Title, validation.Required),
+		validation.Field(&institution.Address, validation.Required),
 	)
 }

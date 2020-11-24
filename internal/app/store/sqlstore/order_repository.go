@@ -10,12 +10,12 @@ type OrderRepository struct {
 	store *Store
 }
 
-func (o *OrderRepository) Create(model *models.Order) error {
+func (orderRepository *OrderRepository) Create(model *models.Order) error {
 	if err := model.Validate(); err != nil {
 		return err
 	}
 	
-	return o.store.db.QueryRow(
+	return orderRepository.store.db.QueryRow(
 		"INSERT INTO orders (cost, datetime, dish_id, user_id) VALUES ($1,$2, $3, $4) RETURNING id",
 		model.Cost,
 		model.DateTime,
@@ -24,9 +24,9 @@ func (o *OrderRepository) Create(model *models.Order) error {
 	).Scan(&model.Id)
 }
 
-func (o *OrderRepository) FindById(id int64) (*models.Order, error) {
+func (orderRepository *OrderRepository) FindById(id int64) (*models.Order, error) {
 	model := &models.Order{}
-	if err := o.store.db.QueryRow("SELECT id, cost, datetime, status, dish_id, user_id FROM orders WHERE id=$1", id).
+	if err := orderRepository.store.db.QueryRow("SELECT id, cost, datetime, status, dish_id, user_id FROM orders WHERE id=$1", id).
 		Scan(&model.Id, &model.Cost, &model.DateTime, &model.Status, &model.DishId, &model.UserId); err != nil {
 		return nil, err
 	}
@@ -34,9 +34,9 @@ func (o *OrderRepository) FindById(id int64) (*models.Order, error) {
 }
 
 
-func (o *OrderRepository) Cancel(id int64) error {
+func (orderRepository *OrderRepository) Cancel(id int64) error {
 	model := &models.Order{}
-	if err := o.store.db.QueryRow("SELECT id, status FROM orders WHERE id=$1", id).
+	if err := orderRepository.store.db.QueryRow("SELECT id, status FROM orders WHERE id=$1", id).
 		Scan(&model.Id, &model.Status); err != nil {
 		return err
 	}
@@ -47,14 +47,14 @@ func (o *OrderRepository) Cancel(id int64) error {
 		return errors.New("Order is rejected!")
 	}
 	
-	_, err := o.store.db.Exec("UPDATE orders SET status = $1 where id = $2",  models.REJECTED, id)
+	_, err := orderRepository.store.db.Exec("UPDATE orders SET status = $1 where id = $2",  models.REJECTED, id)
 	return err
 }
 
 // For IOT
-func (o *OrderRepository) Ready(id int64) error {
+func (orderRepository *OrderRepository) Ready(id int64) error {
 	model := &models.Order{}
-	if err := o.store.db.QueryRow("SELECT id, status FROM orders WHERE id=$1", id).
+	if err := orderRepository.store.db.QueryRow("SELECT id, status FROM orders WHERE id=$1", id).
 		Scan(&model.Id, &model.Status); err != nil {
 		return err
 	}
@@ -65,21 +65,21 @@ func (o *OrderRepository) Ready(id int64) error {
 		return errors.New("Order is rejected!")
 	}
 	
-	_, err := o.store.db.Exec("UPDATE orders SET status = $1 where id = $2",  models.READY, id)
+	_, err := orderRepository.store.db.Exec("UPDATE orders SET status = $1 where id = $2",  models.READY, id)
 	return err
 }
 
-func (o *OrderRepository) getOrderToExecute() (*models.Order, error) {
+func (orderRepository *OrderRepository) getOrderToExecute() (*models.Order, error) {
 	model := &models.Order{}
-	if err := o.store.db.QueryRow("SELECT id, cost, datetime, status, dish_id, user_id FROM orders WHERE status = 0 ORDER BY datetime ASC").
+	if err := orderRepository.store.db.QueryRow("SELECT id, cost, datetime, status, dish_id, user_id FROM orders WHERE status = 0 ORDER BY datetime ASC").
 		Scan(&model.Id, &model.Cost, &model.DateTime, &model.Status, &model.DishId, &model.UserId); err != nil {
 		return nil, err
 	}
 	return model, nil
 }
 
-func (d *DishRepository) GetOrderToExecute() (*models.Order, error) {
-	rows, err := d.store.db.Query("SELECT id, cost, datetime, status, dish_id, user_id FROM orders WHERE status = 0 ORDER BY datetime ASC")
+func (orderRepository *OrderRepository) GetOrderToExecute() (*models.Order, error) {
+	rows, err := orderRepository.store.db.Query("SELECT id, cost, datetime, status, dish_id, user_id FROM orders WHERE status = 0 ORDER BY datetime ASC")
 	if err != nil {
 		panic(err)
 	}

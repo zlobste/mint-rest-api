@@ -11,11 +11,11 @@ type PaymentDetails struct {
 	InstitutionId string `json:"institution_id"`
 }
 
-func (p *PaymentDetails) Validate() error {
+func (paymentDetails *PaymentDetails) Validate() error {
 	return validation.ValidateStruct(
-		p,
-		validation.Field(&p.Bank, validation.Required),
-		validation.Field(&p.Account, validation.Required),
-		validation.Field(&p.InstitutionId, validation.Required),
+		paymentDetails,
+		validation.Field(&paymentDetails.Bank, validation.Required),
+		validation.Field(&paymentDetails.Account, validation.Required),
+		validation.Field(&paymentDetails.InstitutionId, validation.Required),
 	)
 }

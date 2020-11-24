@@ -8,7 +8,7 @@ import (
 	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
 
-func (s *server) CreatePaymentDetails() http.HandlerFunc {
+func (server *server) CreatePaymentDetails() http.HandlerFunc {
 	type request struct {
 		Bank            string  `json:"bank"`
 		Account         string  `json:"account"`
@@ -26,7 +26,7 @@ func (s *server) CreatePaymentDetails() http.HandlerFunc {
 			Account:       req.Account,
 			InstitutionId: req.InstitutionId,
 		}
-		if err := s.store.PaymentDetails().Create(pd); err != nil {
+		if err := server.store.PaymentDetails().Create(pd); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
@@ -35,7 +35,7 @@ func (s *server) CreatePaymentDetails() http.HandlerFunc {
 	}
 }
 
-func (s *server) DeletePaymentDetails() http.HandlerFunc {
+func (server *server) DeletePaymentDetails() http.HandlerFunc {
 	type request struct {
 		id int64 `json:"id"`
 	}
@@ -45,7 +45,7 @@ func (s *server) DeletePaymentDetails() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		err := s.store.PaymentDetails().DeleteById(req.id)
+		err := server.store.PaymentDetails().DeleteById(req.id)
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
@@ -55,7 +55,7 @@ func (s *server) DeletePaymentDetails() http.HandlerFunc {
 	}
 }
 
-func (s *server) GetPaymentDetails() http.HandlerFunc {
+func (server *server) GetPaymentDetails() http.HandlerFunc {
 	type request struct {
 		id int64 `json:"id"`
 	}
@@ -66,7 +66,7 @@ func (s *server) GetPaymentDetails() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		paymentDetails, err := s.store.PaymentDetails().FindById(req.id)
+		paymentDetails, err := server.store.PaymentDetails().FindById(req.id)
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return

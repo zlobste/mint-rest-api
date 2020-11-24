@@ -21,12 +21,12 @@ type Order struct {
 	UserId          string      `json:"user_id"`
 }
 
-func (o *Order) Validate() error {
+func (order *Order) Validate() error {
 	return validation.ValidateStruct(
-		o,
-		validation.Field(&o.Cost, validation.Required),
-		validation.Field(&o.DateTime, validation.Required),
-		validation.Field(&o.DishId, validation.Required),
-		validation.Field(&o.UserId, validation.Required),
+		order,
+		validation.Field(&order.Cost, validation.Required),
+		validation.Field(&order.DateTime, validation.Required),
+		validation.Field(&order.DishId, validation.Required),
+		validation.Field(&order.UserId, validation.Required),
 	)
 }

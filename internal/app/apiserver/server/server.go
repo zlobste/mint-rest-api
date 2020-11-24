@@ -27,8 +27,8 @@ func newServer(store store.Store) *server {
 	return s
 }
 
-func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	s.router.ServeHTTP(w, r)
+func (server *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	server.router.ServeHTTP(w, r)
 }
 
 func Start(config *Config) error {

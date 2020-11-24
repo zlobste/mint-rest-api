@@ -12,12 +12,12 @@ type Dish struct {
 	Disabled        bool    `json:"disabled"`
 }
 
-func (d *Dish) Validate() error {
+func (dish *Dish) Validate() error {
 	return validation.ValidateStruct(
-		d,
-		validation.Field(&d.Title, validation.Required, validation.Length(6, 100)),
-		validation.Field(&d.Description, validation.Required, validation.Length(6, 2000)),
-		validation.Field(&d.Cost, validation.Required),
-		validation.Field(&d.Cost, validation.Required),
+		dish,
+		validation.Field(&dish.Title, validation.Required, validation.Length(6, 100)),
+		validation.Field(&dish.Description, validation.Required, validation.Length(6, 2000)),
+		validation.Field(&dish.Cost, validation.Required),
+		validation.Field(&dish.Cost, validation.Required),
 	)
 }
