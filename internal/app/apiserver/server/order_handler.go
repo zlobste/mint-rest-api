@@ -38,27 +38,6 @@ func (server *server) CreateOrder() http.HandlerFunc {
 	}
 }
 
-func (server *server) CancelOrder() http.HandlerFunc {
-
-	type request struct {
-		id int64 `json:"id"`
-	}
-	return func(w http.ResponseWriter, r *http.Request) {
-		req := &request{}
-		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
-			helpers.Error(w, r, http.StatusBadRequest, err)
-			return
-		}
-		err := server.store.Order().CancelOrder(req.id)
-		if err != nil {
-			helpers.Error(w, r, http.StatusBadRequest, err)
-			return
-		}
-
-		helpers.Respond(w, r, http.StatusOK, nil)
-	}
-}
-
 func (server *server) GetOrder() http.HandlerFunc {
 	type request struct {
 		id int64 `json:"id"`
@@ -76,6 +55,59 @@ func (server *server) GetOrder() http.HandlerFunc {
 			return
 		}
 
+		helpers.Respond(w, r, http.StatusOK, order)
+	}
+}
+
+func (server *server) CancelOrder() http.HandlerFunc {
+	type request struct {
+		id int64 `json:"id"`
+	}
+	return func(w http.ResponseWriter, r *http.Request) {
+		req := &request{}
+		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+			helpers.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+		err := server.store.Order().CancelOrder(req.id)
+		if err != nil {
+			helpers.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+		
+		helpers.Respond(w, r, http.StatusOK, nil)
+	}
+}
+
+func (server *server) SetStatusReady() http.HandlerFunc {
+	type request struct {
+		id int64 `json:"id"`
+	}
+	return func(w http.ResponseWriter, r *http.Request) {
+		req := &request{}
+		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+			helpers.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+		err := server.store.Order().SetStatusReady(req.id)
+		if err != nil {
+			helpers.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+		
+		helpers.Respond(w, r, http.StatusOK, nil)
+	}
+}
+
+func (server *server) GetOrderToExecute() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		
+		order, err := server.store.Order().GetOrderToExecute()
+		if err != nil {
+			helpers.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+		
 		helpers.Respond(w, r, http.StatusOK, order)
 	}
 }
