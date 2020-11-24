@@ -1,6 +1,8 @@
 package sqlstore
 
 import (
+	"errors"
+	
 	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
 
@@ -48,4 +50,14 @@ func (userRepository *UserRepository) FindById(id int64) (*models.User, error) {
 		return nil, err
 	}
 	return model, nil
+}
+
+func (userRepository *UserRepository) BlockUser(id int64) error {
+	_, err := userRepository.store.db.Exec("UPDATE users SET blocked = true WHERE id = $1", id)
+	return err
+}
+
+func (userRepository *UserRepository) UnblockUser(id int64) error {
+	_, err := userRepository.store.db.Exec("UPDATE users SET blocked = false WHERE id = $1", id)
+	return err
 }
