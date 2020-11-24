@@ -69,3 +69,31 @@ func (o *OrderRepository) Ready(id int64) error {
 	return err
 }
 
+func (o *OrderRepository) getOrderToExecute() (*models.Order, error) {
+	model := &models.Order{}
+	if err := o.store.db.QueryRow("SELECT id, cost, datetime, status, dish_id, user_id FROM orders WHERE status = 0 ORDER BY datetime ASC").
+		Scan(&model.Id, &model.Cost, &model.DateTime, &model.Status, &model.DishId, &model.UserId); err != nil {
+		return nil, err
+	}
+	return model, nil
+}
+
+func (d *DishRepository) GetOrderToExecute() (*models.Order, error) {
+	rows, err := d.store.db.Query("SELECT id, cost, datetime, status, dish_id, user_id FROM orders WHERE status = 0 ORDER BY datetime ASC")
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+	orders := []*models.Order{}
+	
+	for rows.Next(){
+		model := models.Order{}
+		err := rows.Scan(&model.Id, &model.Cost, &model.DateTime, &model.Status, &model.DishId, &model.UserId)
+		if err != nil{
+			return  nil, err
+		}
+		orders = append(orders, &model)
+	}
+	
+	return orders[0], nil
+}
