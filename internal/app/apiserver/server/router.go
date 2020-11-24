@@ -31,7 +31,7 @@ func (server *server) ConfigureRouter() {
 	editDishRouter.Use(middlewares.TokenAuthMiddleware)
 	editDishRouter.HandleFunc("/create", server.CreateDish()).Methods("POST")
 	editDishRouter.HandleFunc("/delete", server.DeleteDish()).Methods("DELETE")
-	editDishRouter.HandleFunc("/sale", server.CalculateSale()).Methods("GET")
+	editDishRouter.HandleFunc("/sale", server.CalculateSale()).Methods("POST")
 	
 	
 	institutionRouter := apiRouter.PathPrefix("/institution").Subrouter()
