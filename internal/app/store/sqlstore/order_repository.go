@@ -42,12 +42,30 @@ func (o *OrderRepository) Cancel(id int64) error {
 	}
 	
 	if model.Status == models.PENDING {
-		return errors.New("Order has already in progress!")
+		return errors.New("Order in progress!")
 	} else if model.Status == models.REJECTED {
 		return errors.New("Order is rejected!")
 	}
 	
 	_, err := o.store.db.Exec("UPDATE orders SET status = $1 where id = $2",  models.REJECTED, id)
+	return err
+}
+
+// For IOT
+func (o *OrderRepository) Ready(id int64) error {
+	model := &models.Order{}
+	if err := o.store.db.QueryRow("SELECT id, status FROM orders WHERE id=$1", id).
+		Scan(&model.Id, &model.Status); err != nil {
+		return err
+	}
+	
+	if model.Status == models.READY {
+		return errors.New("Order is ready!")
+	} else if model.Status == models.REJECTED {
+		return errors.New("Order is rejected!")
+	}
+	
+	_, err := o.store.db.Exec("UPDATE orders SET status = $1 where id = $2",  models.READY, id)
 	return err
 }
 
