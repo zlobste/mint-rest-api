@@ -24,7 +24,7 @@ func (dishRepository *DishRepository) Create(model *models.Dish) error {
 func (dishRepository *DishRepository) FindById(id int64) (*models.Dish, error) {
 	model := &models.Dish{}
 	if err := dishRepository.store.db.QueryRow(
-		"SELECT id, title, description, disabled FROM dishes WHERE id=$1",
+		"SELECT id, title, description, cost::decimal, disabled FROM dishes WHERE id=$1",
 		id,
 	).Scan(&model.Id, &model.Title, &model.Description, &model.Cost, &model.Disabled); err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func (dishRepository *DishRepository) DeleteById(id int64) error {
 }
 
 func (dishRepository *DishRepository) GetAllDishes() ([]models.Dish, error) {
-	rows, err := dishRepository.store.db.Query("SELECT * FROM dishes WHERE disabled = false")
+	rows, err := dishRepository.store.db.Query("SELECT id, title, description, cost::decimal FROM dishes WHERE disabled = false")
 	if err != nil {
 		panic(err)
 	}

@@ -27,7 +27,7 @@ func (orderRepository *OrderRepository) Create(model *models.Order) error {
 func (orderRepository *OrderRepository) FindById(id int64) (*models.Order, error) {
 	model := &models.Order{}
 	if err := orderRepository.store.db.QueryRow(
-		"SELECT id, cost, datetime, status, dish_id, user_id FROM orders WHERE id=$1",
+		"SELECT id, cost::decimal, datetime, status, dish_id, user_id FROM orders WHERE id=$1",
 		id,
 	).Scan(&model.Id, &model.Cost, &model.DateTime, &model.Status, &model.DishId, &model.UserId); err != nil {
 		return nil, err
@@ -73,7 +73,7 @@ func (orderRepository *OrderRepository) SetStatusReady(id int64) error {
 
 func (orderRepository *OrderRepository) GetOrderToExecute() (*models.Order, error) {
 	rows, err := orderRepository.store.db.Query(
-		"SELECT id, cost, datetime, status, dish_id, user_id FROM orders WHERE status = 0 ORDER BY datetime ASC",
+		"SELECT id, cost::decimal, datetime, status, dish_id, user_id FROM orders WHERE status = 0 ORDER BY datetime ASC",
 	)
 	if err != nil {
 		panic(err)
