@@ -1,8 +1,6 @@
 package sqlstore
 
 import (
-	"errors"
-	
 	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
 
