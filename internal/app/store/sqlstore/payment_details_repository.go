@@ -12,7 +12,7 @@ func (paymentDetailsRepository *PaymentDetailsRepository) Create(model *models.P
 	if err := model.Validate(); err != nil {
 		return err
 	}
-
+	
 	return paymentDetailsRepository.store.db.QueryRow(
 		"INSERT INTO payment_details (bank, account, institution_id) VALUES ($1,$2, $3) RETURNING id",
 		model.Bank,
@@ -33,6 +33,6 @@ func (paymentDetailsRepository *PaymentDetailsRepository) FindById(id int64) (*m
 }
 
 func (paymentDetailsRepository *PaymentDetailsRepository) DeleteById(id int64) error {
-	_, err := paymentDetailsRepository.store.db.Exec("DELETE FROM payment_details where id = $1", id)
+	_, err := paymentDetailsRepository.store.db.Exec("DELETE FROM payment_details WHERE id = $1", id)
 	return err
 }

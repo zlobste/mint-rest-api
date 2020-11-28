@@ -5,7 +5,7 @@ import (
 )
 
 func (server *server) ConfigureRouter() {
-
+	
 	server.router.Use(middlewares.ContentTypeMiddleware)
 	server.router.HandleFunc("/register", server.SignUp()).Methods("POST")
 	server.router.HandleFunc("/login", server.SignIn()).Methods("POST")
@@ -32,7 +32,6 @@ func (server *server) ConfigureRouter() {
 	editDishRouter.HandleFunc("/create", server.CreateDish()).Methods("POST")
 	editDishRouter.HandleFunc("/delete", server.DeleteDish()).Methods("DELETE")
 	editDishRouter.HandleFunc("/sale", server.CalculateSale()).Methods("POST")
-	
 	
 	institutionRouter := apiRouter.PathPrefix("/institution").Subrouter()
 	institutionRouter.HandleFunc("/find", server.FindInstitutionsByTitle()).Methods("GET")

@@ -12,9 +12,9 @@ import (
 )
 
 type server struct {
-	router  *mux.Router
-	logger  *logrus.Logger
-	store   store.Store
+	router *mux.Router
+	logger *logrus.Logger
+	store  store.Store
 }
 
 func newServer(store store.Store) *server {
@@ -42,7 +42,7 @@ func Start(config *Config) error {
 }
 
 func newDB(databaseURL string) (*sql.DB, error) {
-	db, err := sql.Open("postgres", databaseURL);
+	db, err := sql.Open("postgres", databaseURL)
 	if err != nil {
 		return nil, err
 	}

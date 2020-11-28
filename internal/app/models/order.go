@@ -13,12 +13,12 @@ const (
 )
 
 type Order struct {
-	Id              int64       `json:"id"`
-	Cost            float64     `json:"cost"`
-	DateTime        time.Time   `json:"datetime"`
-	Status          int64       `json:"status"`
-	DishId          string      `json:"dish_id"`
-	UserId          string      `json:"user_id"`
+	Id       int64     `json:"id"`
+	Cost     float64   `json:"cost"`
+	DateTime time.Time `json:"datetime"`
+	Status   int64     `json:"status"`
+	DishId   string    `json:"dish_id"`
+	UserId   string    `json:"user_id"`
 }
 
 func (order *Order) Validate() error {

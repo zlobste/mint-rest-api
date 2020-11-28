@@ -2,17 +2,19 @@ package sqlstore
 
 import (
 	"database/sql"
+	
 	_ "github.com/lib/pq"
+	
 	"github.com/zlobste/mint-rest-api/internal/app/store"
 )
 
 type Store struct {
-	db                          *sql.DB
-	userRepository              *UserRepository
-	orderRepository             *OrderRepository
-	dishRepository              *DishRepository
-	paymentDetailsRepository    *PaymentDetailsRepository
-	institutionRepository       *InstitutionRepository
+	db                       *sql.DB
+	userRepository           *UserRepository
+	orderRepository          *OrderRepository
+	dishRepository           *DishRepository
+	paymentDetailsRepository *PaymentDetailsRepository
+	institutionRepository    *InstitutionRepository
 }
 
 func New(db *sql.DB) *Store {

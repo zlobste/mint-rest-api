@@ -10,8 +10,8 @@ import (
 
 func (server *server) CreateInstitution() http.HandlerFunc {
 	type request struct {
-		Title   string  `json:"title"`
-		Address string  `json:"address"`
+		Title   string `json:"title"`
+		Address string `json:"address"`
 	}
 	
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -21,7 +21,7 @@ func (server *server) CreateInstitution() http.HandlerFunc {
 			return
 		}
 		i := &models.Institution{
-			Title: req.Title,
+			Title:   req.Title,
 			Address: req.Address,
 		}
 		if err := server.store.Institution().Create(i); err != nil {

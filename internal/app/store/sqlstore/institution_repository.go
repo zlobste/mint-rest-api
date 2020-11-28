@@ -12,7 +12,7 @@ func (institutionRepository *InstitutionRepository) Create(model *models.Institu
 	if err := model.Validate(); err != nil {
 		return err
 	}
-
+	
 	return institutionRepository.store.db.QueryRow(
 		"INSERT INTO institutions (title, address) VALUES ($1,$2) RETURNING id",
 		model.Title,
@@ -22,8 +22,8 @@ func (institutionRepository *InstitutionRepository) Create(model *models.Institu
 
 func (institutionRepository *InstitutionRepository) FindByTitle(title string) ([]models.Institution, error) {
 	rows, err := institutionRepository.store.db.Query(
-		"SELECT * FROM institutions WHERE disabled = false AND title LIKE $1",
-		title + "%",
+		"SELECT * FROM institutions WHERE disabled = FALSE AND title LIKE $1",
+		title+"%",
 	)
 	if err != nil {
 		panic(err)
@@ -31,11 +31,11 @@ func (institutionRepository *InstitutionRepository) FindByTitle(title string) ([
 	defer rows.Close()
 	institutions := []models.Institution{}
 	
-	for rows.Next(){
+	for rows.Next() {
 		model := models.Institution{}
 		err := rows.Scan(&model.Id, &model.Title, &model.Address)
 		if err != nil {
-			return  nil, err
+			return nil, err
 		}
 		institutions = append(institutions, model)
 	}
@@ -44,7 +44,6 @@ func (institutionRepository *InstitutionRepository) FindByTitle(title string) ([
 }
 
 func (institutionRepository *InstitutionRepository) DeleteById(id int64) error {
-	_, err := institutionRepository.store.db.Exec("DELETE FROM institutions where id = $1", id)
+	_, err := institutionRepository.store.db.Exec("DELETE FROM institutions WHERE id = $1", id)
 	return err
 }
-

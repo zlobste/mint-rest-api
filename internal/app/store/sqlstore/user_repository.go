@@ -32,7 +32,7 @@ func (userRepository *UserRepository) FindByEmail(email string) (*models.User, e
 		"SELECT id, name, email, password, role, balance, blocked FROM users WHERE email=$1",
 		email,
 	).Scan(&model.Id, &model.Name, &model.Email, &model.Password, &model.Role, &model.Balance, &model.Blocked);
-	err != nil {
+		err != nil {
 		return nil, err
 	}
 	return model, nil
@@ -44,18 +44,18 @@ func (userRepository *UserRepository) FindById(id int64) (*models.User, error) {
 		"SELECT id, name, email, password, role, balance, blocked FROM users WHERE id=$1",
 		id,
 	).Scan(&model.Id, &model.Name, &model.Email, &model.Password, &model.Role, &model.Balance, &model.Blocked);
-	err != nil {
+		err != nil {
 		return nil, err
 	}
 	return model, nil
 }
 
 func (userRepository *UserRepository) BlockUser(id int64) error {
-	_, err := userRepository.store.db.Exec("UPDATE users SET blocked = true WHERE id = $1", id)
+	_, err := userRepository.store.db.Exec("UPDATE users SET blocked = TRUE WHERE id = $1", id)
 	return err
 }
 
 func (userRepository *UserRepository) UnblockUser(id int64) error {
-	_, err := userRepository.store.db.Exec("UPDATE users SET blocked = false WHERE id = $1", id)
+	_, err := userRepository.store.db.Exec("UPDATE users SET blocked = FALSE WHERE id = $1", id)
 	return err
 }

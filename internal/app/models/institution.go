@@ -5,10 +5,10 @@ import (
 )
 
 type Institution struct {
-	Id          int64   `json:"id"`
-	Title       string  `json:"title"`
-	Address     string  `json:"address"`
-	Disabled    bool    `json:"disabled"`
+	Id       int64  `json:"id"`
+	Title    string `json:"title"`
+	Address  string `json:"address"`
+	Disabled bool   `json:"disabled"`
 }
 
 func (institution *Institution) Validate() error {

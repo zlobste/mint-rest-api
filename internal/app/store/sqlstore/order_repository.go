@@ -27,14 +27,13 @@ func (orderRepository *OrderRepository) Create(model *models.Order) error {
 func (orderRepository *OrderRepository) FindById(id int64) (*models.Order, error) {
 	model := &models.Order{}
 	if err := orderRepository.store.db.QueryRow(
-		"SELECT id, cost::decimal, datetime, status, dish_id, user_id FROM orders WHERE id=$1",
+		"SELECT id, cost::DECIMAL, datetime, status, dish_id, user_id FROM orders WHERE id=$1",
 		id,
 	).Scan(&model.Id, &model.Cost, &model.DateTime, &model.Status, &model.DishId, &model.UserId); err != nil {
 		return nil, err
 	}
 	return model, nil
 }
-
 
 func (orderRepository *OrderRepository) CancelOrder(id int64) error {
 	model := &models.Order{}
@@ -49,7 +48,7 @@ func (orderRepository *OrderRepository) CancelOrder(id int64) error {
 		return errors.New("Order is rejected!")
 	}
 	
-	_, err := orderRepository.store.db.Exec("UPDATE orders SET status = $1 where id = $2",  models.REJECTED, id)
+	_, err := orderRepository.store.db.Exec("UPDATE orders SET status = $1 WHERE id = $2", models.REJECTED, id)
 	return err
 }
 
@@ -67,13 +66,13 @@ func (orderRepository *OrderRepository) SetStatusReady(id int64) error {
 		return errors.New("Order is rejected!")
 	}
 	
-	_, err := orderRepository.store.db.Exec("UPDATE orders SET status = $1 where id = $2",  models.READY, id)
+	_, err := orderRepository.store.db.Exec("UPDATE orders SET status = $1 WHERE id = $2", models.READY, id)
 	return err
 }
 
 func (orderRepository *OrderRepository) GetOrderToExecute() (*models.Order, error) {
 	rows, err := orderRepository.store.db.Query(
-		"SELECT id, cost::decimal, datetime, status, dish_id, user_id FROM orders WHERE status = 0 ORDER BY datetime ASC",
+		"SELECT id, cost::DECIMAL, datetime, status, dish_id, user_id FROM orders WHERE status = 0 ORDER BY datetime ASC",
 	)
 	if err != nil {
 		panic(err)
@@ -81,11 +80,11 @@ func (orderRepository *OrderRepository) GetOrderToExecute() (*models.Order, erro
 	defer rows.Close()
 	orders := []*models.Order{}
 	
-	for rows.Next(){
+	for rows.Next() {
 		model := models.Order{}
 		err := rows.Scan(&model.Id, &model.Cost, &model.DateTime, &model.Status, &model.DishId, &model.UserId)
-		if err != nil{
-			return  nil, err
+		if err != nil {
+			return nil, err
 		}
 		orders = append(orders, &model)
 	}

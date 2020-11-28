@@ -10,11 +10,11 @@ import (
 
 func (server *server) CreatePaymentDetails() http.HandlerFunc {
 	type request struct {
-		Bank            string  `json:"bank"`
-		Account         string  `json:"account"`
-		InstitutionId   string  `json:"institutionId_id"`
+		Bank          string `json:"bank"`
+		Account       string `json:"account"`
+		InstitutionId string `json:"institutionId_id"`
 	}
-
+	
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := &request{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
@@ -30,7 +30,7 @@ func (server *server) CreatePaymentDetails() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
-
+		
 		helpers.Respond(w, r, http.StatusCreated, pd)
 	}
 }
@@ -50,7 +50,7 @@ func (server *server) DeletePaymentDetails() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-
+		
 		helpers.Respond(w, r, http.StatusOK, nil)
 	}
 }
@@ -59,7 +59,7 @@ func (server *server) GetPaymentDetails() http.HandlerFunc {
 	type request struct {
 		id int64 `json:"id"`
 	}
-
+	
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := &request{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
@@ -71,7 +71,7 @@ func (server *server) GetPaymentDetails() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-
+		
 		helpers.Respond(w, r, http.StatusOK, paymentDetails)
 	}
 }

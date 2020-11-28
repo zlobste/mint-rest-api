@@ -16,7 +16,7 @@ type AccessDetails struct {
 }
 
 func CreateJWT(userid int64) (string, error) {
-	os.Setenv("ACCESS_SECRET", "jdnfksdmfksd") //this should be in an env file
+	os.Setenv("ACCESS_SECRET", "jdnfksdmfksd") // this should be in an env file
 	claims := jwt.MapClaims{}
 	claims["userID"] = userid
 	claims["IssuedAt"] = time.Now().Unix()
@@ -71,7 +71,7 @@ func ExtractTokenMetadata(r *http.Request) (*AccessDetails, error) {
 			return nil, err
 		}
 		return &AccessDetails{
-			UserId:   userId,
+			UserId: userId,
 		}, nil
 	}
 	return nil, err

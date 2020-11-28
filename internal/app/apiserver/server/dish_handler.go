@@ -14,7 +14,7 @@ func (server *server) CreateDish() http.HandlerFunc {
 		Description string  `json:"description"`
 		Cost        float64 `json:"cost"`
 	}
-
+	
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := &request{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
@@ -22,21 +22,21 @@ func (server *server) CreateDish() http.HandlerFunc {
 			return
 		}
 		d := &models.Dish{
-			Title: req.Title,
+			Title:       req.Title,
 			Description: req.Description,
-			Cost: req.Cost,
+			Cost:        req.Cost,
 		}
 		if err := server.store.Dish().Create(d); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
-
+		
 		helpers.Respond(w, r, http.StatusCreated, d)
 	}
 }
 
 func (server *server) DeleteDish() http.HandlerFunc {
-
+	
 	type request struct {
 		id int64 `json:"id"`
 	}
@@ -51,7 +51,7 @@ func (server *server) DeleteDish() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-
+		
 		helpers.Respond(w, r, http.StatusOK, nil)
 	}
 }
@@ -60,7 +60,7 @@ func (server *server) GetDish() http.HandlerFunc {
 	type request struct {
 		id int64 `json:"id"`
 	}
-
+	
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := &request{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
@@ -72,7 +72,7 @@ func (server *server) GetDish() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-
+		
 		helpers.Respond(w, r, http.StatusOK, dish)
 	}
 }

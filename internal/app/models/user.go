@@ -16,41 +16,41 @@ const (
 )
 
 type User struct {
-	Id          int64   `json:"id"`
-	Name        string  `json:"name"`
-	Email       string  `json:"email"`
-	Password    string  `json:"password,omitempty"`
-	Role        int64   `json:"role"`
-	Balance     string  `json:"balance"`
-	Blocked     bool    `json:"blocked"`
+	Id       int64  `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password,omitempty"`
+	Role     int64  `json:"role"`
+	Balance  string `json:"balance"`
+	Blocked  bool   `json:"blocked"`
 }
 
-func (user *User) EncryptPassword() error {
-	if len(user.Password) == 0 {
+func (u *User) EncryptPassword() error {
+	if len(u.Password) == 0 {
 		return errors.New("Wrong password length!")
 	}
-	enc, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
+	enc, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.MinCost)
 	if err != nil {
 		return err
 	}
-	user.Password = string(enc)
+	u.Password = string(enc)
 	return nil
 }
 
-func (user *User) Validate() error {
+func (u *User) Validate() error {
 	return validation.ValidateStruct(
-		user,
-		validation.Field(&user.Name, validation.Required, validation.Length(6, 100)),
-		validation.Field(&user.Email, validation.Required, is.Email),
-		validation.Field(&user.Password, validation.Required, validation.Length(6, 100)),
-		validation.Field(&user.Role, validation.Required),
+		u,
+		validation.Field(&u.Name, validation.Required, validation.Length(6, 100)),
+		validation.Field(&u.Email, validation.Required, is.Email),
+		validation.Field(&u.Password, validation.Required, validation.Length(6, 100)),
+		validation.Field(&u.Role, validation.Required),
 	)
 }
 
-func (user *User) Sanitize() {
-	user.Password = ""
+func (u *User) Sanitize() {
+	u.Password = ""
 }
 
-func (user *User) ComparePassword(password string) bool {
-	return bcrypt.CompareHashAndPassword([]byte(password), []byte(user.Password)) != nil
+func (u *User) ComparePassword(password string) bool {
+	return bcrypt.CompareHashAndPassword([]byte(password), []byte(u.Password)) != nil
 }

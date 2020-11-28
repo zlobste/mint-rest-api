@@ -26,7 +26,7 @@ func (dishRepository *DishRepository) Create(model *models.Dish) error {
 func (dishRepository *DishRepository) FindById(id int64) (*models.Dish, error) {
 	model := &models.Dish{}
 	if err := dishRepository.store.db.QueryRow(
-		"SELECT id, title, description, cost::decimal, disabled FROM dishes WHERE id=$1",
+		"SELECT id, title, description, cost::DECIMAL, disabled FROM dishes WHERE id=$1",
 		id,
 	).Scan(&model.Id, &model.Title, &model.Description, &model.Cost, &model.Disabled); err != nil {
 		return nil, err
@@ -36,23 +36,23 @@ func (dishRepository *DishRepository) FindById(id int64) (*models.Dish, error) {
 }
 
 func (dishRepository *DishRepository) DeleteById(id int64) error {
-	_, err := dishRepository.store.db.Exec("DELETE FROM dishes where id = $1", id)
+	_, err := dishRepository.store.db.Exec("DELETE FROM dishes WHERE id = $1", id)
 	return err
 }
 
 func (dishRepository *DishRepository) GetAllDishes() ([]models.Dish, error) {
-	rows, err := dishRepository.store.db.Query("SELECT id, title, description, cost::decimal FROM dishes WHERE disabled = false")
+	rows, err := dishRepository.store.db.Query("SELECT id, title, description, cost::DECIMAL FROM dishes WHERE disabled = FALSE")
 	if err != nil {
 		panic(err)
 	}
 	defer rows.Close()
 	dishes := []models.Dish{}
 	
-	for rows.Next(){
+	for rows.Next() {
 		model := models.Dish{}
 		err := rows.Scan(&model.Id, &model.Title, &model.Description, &model.Cost)
-		if err != nil{
-			return  nil, err
+		if err != nil {
+			return nil, err
 		}
 		dishes = append(dishes, model)
 	}
@@ -64,26 +64,27 @@ func (dishRepository *DishRepository) CalculateSale(userId int64, dishId int64) 
 	var average float64
 	
 	if err := dishRepository.store.db.QueryRow(
-		"SELECT AVG(cost::decimal) FROM orders WHERE status = 2 AND user_id = $1",
+		"SELECT AVG(cost::DECIMAL) FROM orders WHERE status = 2 AND user_id = $1",
 		userId,
 	).Scan(&average); err != nil {
 		return 0, err
 	}
 	
 	dish := &models.Dish{}
+	id := dishId
 	if err := dishRepository.store.db.QueryRow(
-		"SELECT cost::decimal, disabled FROM dishes WHERE id=$1",
-		dishId,
+		"SELECT cost::DECIMAL, disabled FROM dishes WHERE id=$1",
+		id,
 	).Scan(&dish.Cost, &dish.Disabled); err != nil {
 		return 0, err
 	}
 	
-	if (dish.Disabled == true) {
+	if dish.Disabled == true {
 		return 0, errors.New("Disabled dish!")
 	}
 	
 	var sale float64 = 0
-	if (dish.Cost > average) {
+	if dish.Cost > average {
 		sale = dish.Cost * 0.1
 	}
 	

@@ -16,20 +16,20 @@ var (
 
 // Login handler for access
 func (server *server) SignIn() http.HandlerFunc {
-
+	
 	type request struct {
-		Email       string  `json:"email"`
-		Password    string  `json:"password"`
-		Role        int64   `json:"role"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
+		Role     int64  `json:"role"`
 	}
-
+	
 	type JWT struct {
 		Token string `json:"token"`
 	}
-
+	
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := &request{}
-		if err:= json.NewDecoder(r.Body).Decode(req); err != nil {
+		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
@@ -39,13 +39,13 @@ func (server *server) SignIn() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusUnauthorized, errIncorrectEmailOrPassword)
 			return
 		}
-
+		
 		token, err := helpers.CreateJWT(user.Id)
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-
+		
 		helpers.Respond(w, r, http.StatusOK, &JWT{Token: token})
 	}
 }
@@ -53,12 +53,12 @@ func (server *server) SignIn() http.HandlerFunc {
 // UserSignUp handler for creating new users
 func (server *server) SignUp() http.HandlerFunc {
 	type request struct {
-		Email       string  `json:"email"`
-		Name        string  `json:"name"`
-		Password    string  `json:"password"`
-		Role        int64   `json:"role"`
+		Email    string `json:"email"`
+		Name     string `json:"name"`
+		Password string `json:"password"`
+		Role     int64  `json:"role"`
 	}
-
+	
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := &request{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
@@ -67,10 +67,10 @@ func (server *server) SignUp() http.HandlerFunc {
 		}
 		
 		u := &models.User{
-			Email: req.Email,
-			Name: req.Name,
+			Email:    req.Email,
+			Name:     req.Name,
 			Password: req.Password,
-			Role: req.Role,
+			Role:     req.Role,
 		}
 		if err := server.store.User().Create(u); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)

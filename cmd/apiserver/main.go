@@ -9,7 +9,7 @@ import (
 	"github.com/zlobste/mint-rest-api/internal/app/apiserver/server"
 )
 
-var(
+var (
 	ConfigPath string
 )
 
@@ -19,16 +19,15 @@ func init() {
 
 func main() {
 	flag.Parse()
-
+	
 	config := server.NewConfig()
-
+	
 	_, err := toml.DecodeFile(ConfigPath, config)
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	
 	if err := server.Start(config); err != nil {
 		log.Fatal(err)
 	}
 }
-

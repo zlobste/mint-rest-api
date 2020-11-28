@@ -11,12 +11,12 @@ import (
 
 func (server *server) CreateOrder() http.HandlerFunc {
 	type request struct {
-		Cost            float64     `json:"cost"`
-		DateTime        time.Time   `json:"datetime"`
-		DishId          string      `json:"dish_id"`
-		UserId          string      `json:"user_id"`
+		Cost     float64   `json:"cost"`
+		DateTime time.Time `json:"datetime"`
+		DishId   string    `json:"dish_id"`
+		UserId   string    `json:"user_id"`
 	}
-
+	
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := &request{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
@@ -24,16 +24,16 @@ func (server *server) CreateOrder() http.HandlerFunc {
 			return
 		}
 		o := &models.Order{
-			Cost: req.Cost,
+			Cost:     req.Cost,
 			DateTime: req.DateTime,
-			DishId: req.DishId,
-			UserId: req.UserId,
+			DishId:   req.DishId,
+			UserId:   req.UserId,
 		}
 		if err := server.store.Order().Create(o); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
-
+		
 		helpers.Respond(w, r, http.StatusCreated, o)
 	}
 }
@@ -42,7 +42,7 @@ func (server *server) GetOrder() http.HandlerFunc {
 	type request struct {
 		id int64 `json:"id"`
 	}
-
+	
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := &request{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
@@ -54,7 +54,7 @@ func (server *server) GetOrder() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-
+		
 		helpers.Respond(w, r, http.StatusOK, order)
 	}
 }
