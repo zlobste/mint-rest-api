@@ -1,0 +1,3 @@
+bind_addres: ":8000"
+log_level: "debug"
+database_url: "postgres://127.0.0.1/go_restful?sslmode=disable&user=postgres&password=postgres"
