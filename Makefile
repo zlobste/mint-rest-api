@@ -8,6 +8,10 @@ build:
 
 .DEFAULT_GOAL := build
 
+.PHONY: build-docker
+build-docker:
+	docker build -f cmd/apiserver/Dockerfile -t apiserver .
+
 .PHONY: db-start
 db-start:
 	@mkdir -p testdata/postgres
