@@ -2,9 +2,13 @@ CONFIG_FILE ?= ./configs/apiserver.yaml
 APP_DSN ?= $(shell sed -n 's/^database_url:[[:space:]]*"\(.*\)"/\1/p' $(CONFIG_FILE))
 MIGRATE := docker run -v $(shell pwd)/migrations:/migrations --network host migrate/migrate:v4.10.0 -path=/migrations/ -database "$(APP_DSN)"
 
+.PHONY run:
+run:
+	go run ./cmd/apiserver
+
 .PHONY build:
 build:
-		go build -v ./cmd/apiserver
+	go build -v ./cmd/apiserver
 
 .DEFAULT_GOAL := build
 
@@ -12,7 +16,7 @@ build:
 build-docker:
 	docker build -f cmd/apiserver/Dockerfile -t apiserver .
 
-.PHONY: db-start
+.PHONY:
 db-start:
 	@mkdir -p testdata/postgres
 	docker run --rm --name postgres -v $(shell pwd)/testdata:/testdata \

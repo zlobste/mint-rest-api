@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
+	"github.com/go-yaml/yaml"
+	"io/ioutil"
 	"log"
-
-	"github.com/BurntSushi/toml"
 
 	"github.com/zlobste/mint-rest-api/internal/app/apiserver/server"
 )
@@ -22,7 +22,12 @@ func main() {
 
 	config := server.NewConfig()
 
-	_, err := toml.DecodeFile(ConfigPath, config)
+	yamlConfig, err := ioutil.ReadFile(ConfigPath)
+	if err != nil {
+		log.Printf("yamlFile.Get err   #%v ", err)
+	}
+
+	err = yaml.Unmarshal([]byte(yamlConfig), &config)
 	if err != nil {
 		log.Fatal(err)
 	}
