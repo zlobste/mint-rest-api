@@ -2,7 +2,7 @@ package sqlstore
 
 import (
 	"errors"
-	
+
 	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
 
@@ -14,9 +14,9 @@ func (dishRepository *DishRepository) Create(model *models.Dish) error {
 	if err := model.Validate(); err != nil {
 		return err
 	}
-	
+
 	return dishRepository.store.db.QueryRow(
-		"INSERT INTO dishes (name, description, cost) VALUES ($1,$2, $3, $4) RETURNING id",
+		"INSERT INTO dishes (title, description, cost) VALUES ($1,$2, $3) RETURNING id",
 		model.Title,
 		model.Description,
 		model.Cost,
@@ -31,7 +31,7 @@ func (dishRepository *DishRepository) FindById(id int64) (*models.Dish, error) {
 	).Scan(&model.Id, &model.Title, &model.Description, &model.Cost, &model.Disabled); err != nil {
 		return nil, err
 	}
-	
+
 	return model, nil
 }
 
@@ -47,7 +47,7 @@ func (dishRepository *DishRepository) GetAllDishes() ([]models.Dish, error) {
 	}
 	defer rows.Close()
 	dishes := []models.Dish{}
-	
+
 	for rows.Next() {
 		model := models.Dish{}
 		err := rows.Scan(&model.Id, &model.Title, &model.Description, &model.Cost)
@@ -56,20 +56,20 @@ func (dishRepository *DishRepository) GetAllDishes() ([]models.Dish, error) {
 		}
 		dishes = append(dishes, model)
 	}
-	
+
 	return dishes, nil
 }
 
 func (dishRepository *DishRepository) CalculateSale(userId int64, dishId int64) (float64, error) {
 	var average float64
-	
+
 	if err := dishRepository.store.db.QueryRow(
 		"SELECT AVG(cost::DECIMAL) FROM orders WHERE status = 2 AND user_id = $1",
 		userId,
 	).Scan(&average); err != nil {
 		return 0, err
 	}
-	
+
 	dish := &models.Dish{}
 	id := dishId
 	if err := dishRepository.store.db.QueryRow(
@@ -78,15 +78,15 @@ func (dishRepository *DishRepository) CalculateSale(userId int64, dishId int64) 
 	).Scan(&dish.Cost, &dish.Disabled); err != nil {
 		return 0, err
 	}
-	
+
 	if dish.Disabled == true {
 		return 0, errors.New("Disabled dish!")
 	}
-	
+
 	var sale float64 = 0
 	if dish.Cost > average {
 		sale = dish.Cost * 0.1
 	}
-	
+
 	return sale, nil
 }
