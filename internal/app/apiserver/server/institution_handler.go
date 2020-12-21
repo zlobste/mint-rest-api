@@ -70,3 +70,15 @@ func (server *server) FindInstitutionsByTitle() http.HandlerFunc {
 		helpers.Respond(w, r, http.StatusOK, dish)
 	}
 }
+
+func (server *server) GetAllInstitutions() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		institutions, err := server.store.Institution().GetAllInstitutions()
+		if err != nil {
+			helpers.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		helpers.Respond(w, r, http.StatusOK, institutions)
+	}
+}

@@ -8,6 +8,7 @@ type UserRepository interface {
 	Create(model *models.User) error
 	FindByEmail(email string) (*models.User, error)
 	FindById(id int64) (*models.User, error)
+	GetAllUsers() ([]models.User, error)
 }
 
 type OrderRepository interface {
@@ -35,5 +36,6 @@ type PaymentDetailsRepository interface {
 type InstitutionRepository interface {
 	Create(model *models.Institution) error
 	FindByTitle(title string) ([]models.Institution, error)
+	GetAllInstitutions() ([]models.Institution, error)
 	DeleteById(id int64) error
 }

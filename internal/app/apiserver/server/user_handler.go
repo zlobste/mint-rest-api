@@ -2,7 +2,7 @@ package server
 
 import (
 	"net/http"
-	
+
 	"github.com/zlobste/mint-rest-api/internal/app/apiserver/server/helpers"
 )
 
@@ -20,5 +20,17 @@ func (server *server) GetUser() http.HandlerFunc {
 		}
 		user.Sanitize()
 		helpers.Respond(w, r, http.StatusCreated, user)
+	}
+}
+
+func (server *server) GetAllUsers() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		users, err := server.store.User().GetAllUsers()
+		if err != nil {
+			helpers.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		helpers.Respond(w, r, http.StatusOK, users)
 	}
 }
