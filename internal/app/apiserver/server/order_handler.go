@@ -2,9 +2,11 @@ package server
 
 import (
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"net/http"
+	"strconv"
 	"time"
-	
+
 	"github.com/zlobste/mint-rest-api/internal/app/apiserver/server/helpers"
 	"github.com/zlobste/mint-rest-api/internal/app/models"
 )
@@ -16,7 +18,7 @@ func (server *server) CreateOrder() http.HandlerFunc {
 		DishId   string    `json:"dish_id"`
 		UserId   string    `json:"user_id"`
 	}
-	
+
 	return func(w http.ResponseWriter, r *http.Request) {
 		req := &request{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
@@ -33,81 +35,65 @@ func (server *server) CreateOrder() http.HandlerFunc {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
-		
+
 		helpers.Respond(w, r, http.StatusCreated, o)
 	}
 }
 
 func (server *server) GetOrder() http.HandlerFunc {
-	type request struct {
-		id int64 `json:"id"`
-	}
-	
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &request{}
-		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
-			helpers.Error(w, r, http.StatusBadRequest, err)
-			return
-		}
-		order, err := server.store.Order().FindById(req.id)
+		params := mux.Vars(r)
+		id, _ := strconv.Atoi(params["id"])
+
+		order, err := server.store.Order().FindById(int64(id))
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		
+
 		helpers.Respond(w, r, http.StatusOK, order)
 	}
 }
 
 func (server *server) CancelOrder() http.HandlerFunc {
-	type request struct {
-		id int64 `json:"id"`
-	}
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &request{}
-		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
-			helpers.Error(w, r, http.StatusBadRequest, err)
-			return
-		}
-		err := server.store.Order().CancelOrder(req.id)
+		params := mux.Vars(r)
+		id, _ := strconv.Atoi(params["id"])
+
+		err := server.store.Order().CancelOrder(int64(id))
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		
+
 		helpers.Respond(w, r, http.StatusOK, nil)
 	}
 }
 
 func (server *server) SetStatusReady() http.HandlerFunc {
-	type request struct {
-		id int64 `json:"id"`
-	}
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &request{}
-		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
-			helpers.Error(w, r, http.StatusBadRequest, err)
-			return
-		}
-		err := server.store.Order().SetStatusReady(req.id)
+		params := mux.Vars(r)
+		id, _ := strconv.Atoi(params["id"])
+
+		err := server.store.Order().SetStatusReady(int64(id))
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		
+
 		helpers.Respond(w, r, http.StatusOK, nil)
 	}
 }
 
 func (server *server) GetOrderToExecute() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		
+
 		order, err := server.store.Order().GetOrderToExecute()
 		if err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
 			return
 		}
-		
+
 		helpers.Respond(w, r, http.StatusOK, order)
 	}
 }
