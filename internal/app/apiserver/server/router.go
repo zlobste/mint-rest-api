@@ -20,10 +20,9 @@ func (server *server) ConfigureRouter() {
 	orderRouter.HandleFunc("/info/{id}", server.GetOrder()).Methods("GET")
 	orderRouter.HandleFunc("/all", server.GetAllOrders()).Methods("GET")
 	editOrderRouter := orderRouter.PathPrefix("/edit").Subrouter()
-	editOrderRouter.Use(middlewares.TokenAuthMiddleware)
 	editOrderRouter.HandleFunc("/create", server.CreateOrder()).Methods("POST")
-	editOrderRouter.HandleFunc("/cancel/{id}", server.CancelOrder()).Methods("UPDATE")
-	editOrderRouter.HandleFunc("/ready/{id}", server.SetStatusReady()).Methods("UPDATE")
+	editOrderRouter.HandleFunc("/cancel/{id}", server.CancelOrder()).Methods("POST")
+	editOrderRouter.HandleFunc("/ready/{id}", server.SetStatusReady()).Methods("POST")
 	editOrderRouter.HandleFunc("/execute/{id}", server.GetOrderToExecute()).Methods("GET")
 
 	dishRouter := apiRouter.PathPrefix("/dish").Subrouter()

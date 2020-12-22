@@ -71,7 +71,7 @@ func (server *server) CancelOrder() http.HandlerFunc {
 			return
 		}
 
-		helpers.Respond(w, r, http.StatusOK, nil)
+		helpers.Respond(w, r, http.StatusOK, id)
 	}
 }
 

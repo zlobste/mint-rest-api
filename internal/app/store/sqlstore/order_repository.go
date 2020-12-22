@@ -42,10 +42,10 @@ func (orderRepository *OrderRepository) CancelOrder(id int64) error {
 		return err
 	}
 
-	if model.Status == models.PENDING {
-		return errors.New("Order in progress!")
+	if model.Status == models.READY {
+		return errors.New("Order is READY!")
 	} else if model.Status == models.REJECTED {
-		return errors.New("Order is rejected!")
+		return errors.New("Order is REJECTED!")
 	}
 
 	_, err := orderRepository.store.db.Exec("UPDATE orders SET status = $1 WHERE id = $2", models.REJECTED, id)
@@ -93,7 +93,7 @@ func (orderRepository *OrderRepository) GetOrderToExecute() (*models.Order, erro
 }
 
 func (orderRepository *OrderRepository) GetAllOrders(id int64) ([]models.Order, error) {
-	rows, err := orderRepository.store.db.Query("SELECT id, user_id, cost::DECIMAL, datetime, dish_id FROM orders WHERE user_id = $1", id)
+	rows, err := orderRepository.store.db.Query("SELECT id, user_id, cost::DECIMAL, datetime, dish_id, status FROM orders WHERE user_id = $1", id)
 	if err != nil {
 		panic(err)
 	}
@@ -102,7 +102,7 @@ func (orderRepository *OrderRepository) GetAllOrders(id int64) ([]models.Order, 
 
 	for rows.Next() {
 		model := models.Order{}
-		err := rows.Scan(&model.Id, &model.UserId, &model.Cost, &model.DateTime, &model.DishId)
+		err := rows.Scan(&model.Id, &model.UserId, &model.Cost, &model.DateTime, &model.DishId, &model.Status)
 		if err != nil {
 			return nil, err
 		}
