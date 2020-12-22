@@ -92,7 +92,7 @@ func (orderRepository *OrderRepository) GetOrderToExecute() (*models.Order, erro
 	return orders[0], nil
 }
 
-func (orderRepository *OrderRepository) GetAllOrders(id uint64) ([]models.Order, error) {
+func (orderRepository *OrderRepository) GetAllOrders(id int64) ([]models.Order, error) {
 	rows, err := orderRepository.store.db.Query("SELECT id, user_id, cost::DECIMAL, datetime, dish_id FROM orders WHERE user_id = $1", id)
 	if err != nil {
 		panic(err)
