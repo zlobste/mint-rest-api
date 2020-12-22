@@ -18,6 +18,7 @@ type OrderRepository interface {
 	CancelOrder(id int64) error
 	SetStatusReady(id int64) error
 	GetOrderToExecute() (*models.Order, error)
+	GetAllOrders(id int64) ([]models.Order, error)
 }
 
 type DishRepository interface {

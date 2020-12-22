@@ -102,3 +102,21 @@ func (server *server) GetOrderToExecute() http.HandlerFunc {
 		helpers.Respond(w, r, http.StatusOK, order)
 	}
 }
+
+func (server *server) GetAllOrders() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		tokenAuth, err := helpers.ExtractTokenMetadata(r)
+		if err != nil {
+			helpers.Error(w, r, http.StatusUnauthorized, err)
+			return
+		}
+
+		orders, err := server.store.Order().GetAllOrders(tokenAuth.UserId)
+		if err != nil {
+			helpers.Error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		helpers.Respond(w, r, http.StatusOK, orders)
+	}
+}
