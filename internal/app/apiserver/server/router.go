@@ -18,6 +18,7 @@ func (server *server) ConfigureRouter() {
 
 	orderRouter := apiRouter.PathPrefix("/order").Subrouter()
 	orderRouter.HandleFunc("/info/{id}", server.GetOrder()).Methods("GET")
+	orderRouter.HandleFunc("/all", server.GetAllOrders()).Methods("GET")
 	editOrderRouter := orderRouter.PathPrefix("/edit").Subrouter()
 	editOrderRouter.Use(middlewares.TokenAuthMiddleware)
 	editOrderRouter.HandleFunc("/create", server.CreateOrder()).Methods("POST")
