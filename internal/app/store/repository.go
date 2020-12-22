@@ -9,6 +9,7 @@ type UserRepository interface {
 	FindByEmail(email string) (*models.User, error)
 	FindById(id int64) (*models.User, error)
 	GetAllUsers() ([]models.User, error)
+	BlockUser(id int64, blocked bool) error
 }
 
 type OrderRepository interface {

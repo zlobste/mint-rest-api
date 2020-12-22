@@ -12,6 +12,7 @@ func (server *server) ConfigureRouter() {
 
 	userRouter := apiRouter.PathPrefix("/user").Subrouter()
 	userRouter.HandleFunc("/all", server.GetAllUsers()).Methods("GET")
+	userRouter.HandleFunc("/block/{id}/{blocked}", server.BlockUser()).Methods("POST")
 	userRouter.Use(middlewares.TokenAuthMiddleware)
 	userRouter.HandleFunc("/info/{id}", server.GetUser()).Methods("GET")
 
@@ -34,8 +35,8 @@ func (server *server) ConfigureRouter() {
 	editDishRouter.HandleFunc("/sale/{id}", server.CalculateSale()).Methods("POST")
 
 	institutionRouter := apiRouter.PathPrefix("/institution").Subrouter()
-	institutionRouter.HandleFunc("/info/{id}", server.GetAllInstitutions()).Methods("GET")
 	institutionRouter.HandleFunc("/find", server.FindInstitutionsByTitle()).Methods("GET")
+	institutionRouter.HandleFunc("/all", server.GetAllInstitutions()).Methods("GET")
 	editInstitutionRouter := institutionRouter.PathPrefix("/edit").Subrouter()
 	editInstitutionRouter.HandleFunc("/create", server.CreateInstitution()).Methods("POST")
 	editInstitutionRouter.HandleFunc("/delete/{id}", server.DeleteInstitution()).Methods("DELETE")

@@ -70,12 +70,7 @@ func (UserRepository *UserRepository) GetAllUsers() ([]models.User, error) {
 	return users, nil
 }
 
-func (UserRepository *UserRepository) BlockUser(id int64) error {
-	_, err := UserRepository.store.db.Exec("UPDATE users SET blocked = TRUE WHERE id = $1", id)
-	return err
-}
-
-func (UserRepository *UserRepository) UnblockUser(id int64) error {
-	_, err := UserRepository.store.db.Exec("UPDATE users SET blocked = FALSE WHERE id = $1", id)
+func (UserRepository *UserRepository) BlockUser(id int64, blocked bool) error {
+	_, err := UserRepository.store.db.Exec("UPDATE users SET blocked = $1 WHERE id = $2", blocked, id)
 	return err
 }
