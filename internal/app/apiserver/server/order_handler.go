@@ -15,11 +15,16 @@ func (server *server) CreateOrder() http.HandlerFunc {
 	type request struct {
 		Cost     float64   `json:"cost"`
 		DateTime time.Time `json:"datetime"`
-		DishId   string    `json:"dish_id"`
-		UserId   string    `json:"user_id"`
+		DishId   int64     `json:"dish_id"`
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
+		tokenAuth, err := helpers.ExtractTokenMetadata(r)
+		if err != nil {
+			helpers.Error(w, r, http.StatusUnauthorized, err)
+			return
+		}
+
 		req := &request{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 			helpers.Error(w, r, http.StatusBadRequest, err)
@@ -29,7 +34,7 @@ func (server *server) CreateOrder() http.HandlerFunc {
 			Cost:     req.Cost,
 			DateTime: req.DateTime,
 			DishId:   req.DishId,
-			UserId:   req.UserId,
+			UserId:   tokenAuth.UserId,
 		}
 		if err := server.store.Order().Create(o); err != nil {
 			helpers.Error(w, r, http.StatusUnprocessableEntity, err)

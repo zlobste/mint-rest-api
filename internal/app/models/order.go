@@ -2,7 +2,7 @@ package models
 
 import (
 	"time"
-	
+
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
@@ -17,8 +17,8 @@ type Order struct {
 	Cost     float64   `json:"cost"`
 	DateTime time.Time `json:"datetime"`
 	Status   int64     `json:"status"`
-	DishId   string    `json:"dish_id"`
-	UserId   string    `json:"user_id"`
+	DishId   int64     `json:"dish_id"`
+	UserId   int64     `json:"user_id"`
 }
 
 func (order *Order) Validate() error {
